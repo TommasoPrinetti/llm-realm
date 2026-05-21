@@ -1,8 +1,8 @@
 ---
 type: research_need_aggregator
 agent: Lucrezio
-created: [date]
-updated: [date]
+created: 2026-05-21
+updated: 2026-05-21
 ---
 
 # Master Omen — Aggregated Research Needs
@@ -31,4 +31,4 @@ Each research need is classified into one or more of these types:
 1. After translating a new question to a structured research need, append it to this table
 2. Classify its type(s)
 3. Increment the repetition counter for each type
-4. If any type reaches 3, trigger tendency registration (see `00_system/skills/LUCREZIO_SKILL.md`)
+4. If any type reaches 3, trigger tendency registration (see LUCREZIO_SKILL.md)

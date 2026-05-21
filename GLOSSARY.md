@@ -4,11 +4,11 @@
 
 **Back-search** — Returning to the Root Vault or registered source to read the full context of a fragment before reporting it as evidence. Mandatory for L2 clues.
 
-**Blueprint** — Short for `RESEARCH_BLUEPRINT.md`. Defines the research project scope, questions, corpus, evidence standards, and direction. Orients all agent activity.
+**Blueprint** — Short for `02_user_realm/RESEARCH_BLUEPRINT.md`. Defines the research project scope, questions, corpus, evidence standards, and direction. Orients all agent activity.
 
 **Internal-first source policy** — The rule that agents must not search external sources (web, APIs, general knowledge) unless the researcher explicitly requests it or the Realm configuration allows logged external intake.
 
-**Concept index** — A thematic collection of evidence fragments grouped under one concept (e.g., "speed vs. quality"). Lives in `03_concept_indexes/`.
+**Concept index** — A thematic collection of evidence fragments grouped under one concept (e.g., "speed vs. quality"). Lives in `01_llm_realm/03_concept_indexes/`.
 
 **Evidence fragment** — A verbatim quote, source claim, observation, data point, or precise paraphrase from the Root Vault or registered source, stored with source path, context, tags, and confidence.
 
@@ -22,7 +22,7 @@
 
 **Mailbox** — `04_mailbox/inbox.md`. Where Tacito writes leads, warnings, contradictions, and serendipitous clues for the researcher.
 
-**Master Omen** — `06_research_tendencies/MASTER_OMEN.md`. Lucrezio's aggregation of all research needs, used to detect recurring patterns.
+**Master Omen** — `01_llm_realm/06_research_tendencies/MASTER_OMEN.md`. Lucrezio's aggregation of all research needs, used to detect recurring patterns.
 
 **Moral division of labour** (Hughes) — The process by which professions collectively manage guilty knowledge through occupational norms, specialised vocabularies, and tacit coordination.
 
@@ -38,7 +38,7 @@
 
 **Shadow AI** — The use of personal AI accounts for professional work, driven underground by organisational policies that forbid official AI use.
 
-**Skill** — An agent skill file (e.g., `CICERO_SKILL.md`) that constrains an agent's actions, tools, and workflows.
+**Skill** — An agent skill file (e.g., `00_system/skills/CICERO_SKILL.md`) that constrains an agent's actions, tools, and workflows.
 
 **Structured research need** — A translated version of the researcher's raw question, filed in `03_logs/structured_research_needs/` with evidence requirements and hypotheses.
 

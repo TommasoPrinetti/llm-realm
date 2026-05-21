@@ -19,8 +19,8 @@ updated: [date]
   03_concept_indexes/            Thematic concept indexes (Cicero)
   04_evidence_fragments/         Small verbatim quotes with source links (Cicero)
   05_backsearch_instructions/    Protocols for Root Vault back-search and serendipity
-  06_research_tendencies/        Master omen document for tendency detection (Lucrezio)
-  06_serendipity_links/          Cross-source and cross-concept serendipity connections (Tacito)
+   06_research_tendencies/        Master omen document for tendency detection (Lucrezio)
+   07_serendipity_links/          Cross-source and cross-concept serendipity connections (Tacito)
   archive/                       Deprecated indexes, archived by Varro
 ```
 
@@ -50,7 +50,7 @@ See `03_logs/source_intake_log.md` for new Root Vault batches and retained exter
 | SERENDIPITY_PROTOCOL.md | L2 discovery methods (metaphor mapping, cross-modal, weak signals) |
 
 ## Serendipity links
-See `06_serendipity_links/` for cross-modal connections discovered by Tacito.
+See `07_serendipity_links/` for cross-modal connections discovered by Tacito.
 
 ## Vault overview
 - Total source folders / batches: [count]

@@ -43,8 +43,8 @@ Files in `01_llm_realm/archive/` are historical. Do not use archived files as ac
 ## Write Permissions
 | Agent | Writes |
 |---|---|
-| Cicero | `01_llm_realm/`, `05_agent_reports/` |
-| Lucrezio | `03_logs/`, `02_user_realm/RESEARCH_TENDENCIES.md`, `05_agent_reports/` |
+| Cicero | `01_llm_realm/`, `05_agent_reports/`, `03_logs/source_intake_log.md`, `03_logs/external_queries.md` |
+| Lucrezio | `03_logs/`, `02_user_realm/RESEARCH_TENDENCIES.md`, `01_llm_realm/06_research_tendencies/`, `05_agent_reports/` |
 | Tacito | `04_mailbox/`, `05_agent_reports/` |
 | Varro | `00_system/`, `01_llm_realm/`, `05_agent_reports/` |
 

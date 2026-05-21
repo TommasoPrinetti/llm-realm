@@ -61,6 +61,11 @@ const cliLaunch = {
   Other:         { command: null, prompt: "Open this folder with your LLM agent, then ask: Read AGENTS.md and continue onboarding." },
 };
 
+// ── YAML sanitize ────────────────────────────────────────────────────────────
+function sanitizeYaml(s) {
+  return s.replace(/"/g, "\\\"").replace(/\n/g, "\\n").replace(/```/g, "`\\`\\`");
+}
+
 // ── display helpers ──────────────────────────────────────────────────────────
 function fmt(template, ...args) { return noColor ? String.raw(template, ...args) : String.raw(template, ...args); }
 
@@ -268,12 +273,15 @@ ${c.bCyan}██╗  ██╗      ██╗     ██╗     ███╗   �
     sourceTypes, incoming, externalPolicy, preferredCli, outputs, preferences,
   });
 
-  output.write("\n");
-  const confirm = (await ask(rl, "Write these files?", "yes")).toLowerCase();
-  if (!["y", "yes"].includes(confirm)) {
-    output.write("\n  " + info("Cancelled. Nothing was written.\n\n"));
-    await rl.close();
-    return;
+  const isForce = process.argv.includes("--force");
+  if (!isForce) {
+    output.write("\n");
+    const confirm = (await ask(rl, "Write these files?", "yes")).toLowerCase();
+    if (!["y", "yes"].includes(confirm)) {
+      output.write("\n  " + info("Cancelled. Nothing was written.\n\n"));
+      await rl.close();
+      return;
+    }
   }
 
   await rl.close();
@@ -345,7 +353,7 @@ Agents read this before major work.
 \`\`\`yaml
 realm_type: research_framework
 research_mode: evolving_complex_corpus
-root_vault_path: "${rootVaultPath || "[path]"}"
+root_vault_path: "${sanitizeYaml(rootVaultPath || "[path]")}"
 root_vault_mode: protected_append_only
 
 source_policy: internal_first
@@ -358,7 +366,7 @@ claim_standard: source_link_required
 l2_policy: backsearch_required
 
 protected_paths:
-  - "${rootVaultPath || "[root_vault_path]"}"
+  - "${sanitizeYaml(rootVaultPath || "[root_vault_path]")}"
   - 02_user_realm/writing/
 
 archive_path: 01_llm_realm/archive/

@@ -16,7 +16,7 @@ The agent starts this protocol automatically when `AGENTS.md` is read and the co
 2. If available, use the CLI's question/input tool to ask the researcher only for missing or underspecified required fields.
 3. Fill `02_user_realm/RESEARCH_BLUEPRINT.md`.
 4. Fill `00_system/REALM_CONFIGURATION.md`, especially `root_vault_path` and source policy.
-5. If `01_llm_realm/06_research_tendencies/MASTER_OMEN.md` does not exist, create it from `MASTER_OMEN_TEMPLATE.md`.
+5. If `01_llm_realm/06_research_tendencies/MASTER_OMEN.md` does not exist, create it from `01_llm_realm/06_research_tendencies/MASTER_OMEN_TEMPLATE.md`.
 6. Confirm the Root Vault exists and is protected.
 7. Ask the researcher whether to start the initial translation.
 8. If yes, run `00_system/INITIAL_TRANSLATION_PROTOCOL.md`.
