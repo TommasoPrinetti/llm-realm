@@ -12,15 +12,15 @@ Be direct, operational, and to the point. Use practical judgment, avoid performa
 3. `00_system/PROCESS_ROUTER.md`
 4. The relevant skill in `00_system/skills/`
 
-If `preferred_llm_cli` is present in `00_system/REALM_CONFIGURATION.md`, adapt onboarding instructions to that CLI when useful. The framework behavior stays the same across CLIs.
+If `preferred_llm_cli` is present in `00_system/REALM_CONFIGURATION.md`, adapt startup instructions to that CLI when useful. The framework behavior stays the same across CLIs.
 
-## Onboarding Gate
+## Startup Gate
 Do not map, index, answer from sources, or ingest new material until `00_system/REALM_CONFIGURATION.md` and `02_user_realm/RESEARCH_BLUEPRINT.md` have been filled for the project.
 
-If either file still contains required placeholders such as `[path]`, `[project name]`, or `[project description]`, automatically enter onboarding mode:
+If either file still contains required placeholders such as `[path]`, `[project name]`, or `[project description]`, automatically start the Realm:
 1. Read `00_system/ONBOARDING.md`.
-2. Create a short onboarding todo list with the CLI's todo/task tool if available.
-3. First translate the existing onboarding draft into a usable research configuration without asking the researcher.
+2. Create a short startup todo list with the CLI's todo/task tool if available.
+3. First translate the existing setup draft into a usable research configuration without asking the researcher.
 4. Use the project description, artifact references, and Root Vault path to infer missing scope, source universe, vocabulary, methods, outputs, and initial mapping targets.
 5. Use shell/file tools to verify local paths. Use web/MCP/browser tools for artifact URLs only when allowed by `external_sources_allowed`, and log external use when required.
 6. Use the CLI's question/input tool only if a required field is absent, the Root Vault cannot be located, or a risky assumption would block immediate mapping.
@@ -30,7 +30,7 @@ If either file still contains required placeholders such as `[path]`, `[project 
 10. Ask the researcher whether to start the initial mapping.
 11. If yes, run the first mapping pass through `00_system/INITIAL_MAPPING_PROTOCOL.md`.
 
-During onboarding, use the CLI's todo/task tool if available to track progress. Do not create a Markdown todo file unless the user asks for one.
+During startup, use the CLI's todo/task tool if available to track progress. Do not create a Markdown todo file unless the user asks for one.
 
 ## Smallest Valid Action
 Do the smallest Realm action that satisfies the task. Do not create a fragment, memo, mailbox note, concept index, report, or archive entry unless it has a distinct purpose.

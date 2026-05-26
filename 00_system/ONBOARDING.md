@@ -1,11 +1,11 @@
 ---
-type: onboarding_protocol
+type: startup_protocol
 agent: Varro
 created: 2026-05-21
 updated: 2026-05-21
 ---
 
-# Onboarding Protocol
+# Realm Startup Protocol
 
 Use once for a new research Realm.
 
@@ -14,12 +14,12 @@ The agent starts this protocol automatically when `AGENTS.md` is read and the co
 ## Steps
 1. Inspect `02_user_realm/RESEARCH_BLUEPRINT.md` and `00_system/REALM_CONFIGURATION.md`.
 2. Create a short todo list with the CLI's todo/task tool if available:
-   - inspect onboarding draft,
+   - inspect setup draft,
    - verify Root Vault,
    - synthesize blueprint/config,
    - initialize aggregator,
    - ask whether to map.
-3. Treat CLI-generated answers as a draft, not as questions to repeat.
+3. Treat CLI-generated answers as a setup draft, not as questions to repeat.
 4. Translate the draft into a usable research configuration:
    - preserve the project title and description,
    - register helpful artifact URLs or file paths,
@@ -41,7 +41,7 @@ The agent starts this protocol automatically when `AGENTS.md` is read and the co
 
 Do not ask follow-up questions before step 11 unless a required field is absent, the Root Vault path cannot be located, external URL access needs permission, or a risky assumption blocks immediate mapping.
 
-Use the CLI's todo/task tool if available to track onboarding. Keep the todo list in the tool UI, not in the Realm, unless the researcher asks for a written checklist.
+Use the CLI's todo/task tool if available to track startup. Keep the todo list in the tool UI, not in the Realm, unless the researcher asks for a written checklist.
 
 Use the CLI's question/input tool for required questions. If no question tool exists, ask in chat. Keep questions short and grouped only when unavoidable.
 
@@ -63,7 +63,7 @@ Use the CLI's question/input tool for required questions. If no question tool ex
 - `l2_policy`
 
 ## Suggested Question Groups
-Keep onboarding short. Ask for:
+Keep setup short. Ask for:
 1. Project name.
 2. One free-form project description.
 3. Helpful artifact URLs or file paths.
@@ -71,7 +71,7 @@ Keep onboarding short. Ask for:
 5. External source policy.
 6. Preferred LLM CLI.
 
-Do not ask the researcher to separately define scope, research object, current questions, source types, methods, outputs, vocabulary, or blind spots during fast onboarding. Infer those later from the description, artifacts, and Root Vault unless the researcher offers them or the missing detail blocks the immediate task.
+Do not ask the researcher to separately define scope, research object, current questions, source types, methods, outputs, vocabulary, or blind spots during fast setup. Infer those later from the description, artifacts, and Root Vault unless the researcher offers them or the missing detail blocks the immediate task.
 
 ## Done When
 - Root Vault is protected and locatable.
@@ -80,7 +80,7 @@ Do not ask the researcher to separately define scope, research object, current q
 - Initial source mapping has a clear target.
 
 ## Smoke Test
-After onboarding, test with one small source batch:
+After startup, test with one small source batch:
 1. Create one source map.
 2. Extract one evidence fragment.
 3. Link it to one concept index.

@@ -40,7 +40,7 @@ Then open the repo with your LLM agent.
 Tell the agent:
 
 ```txt
-Read AGENTS.md and continue onboarding.
+Read AGENTS.md and start the Realm.
 ```
 
 The agent will:
@@ -57,7 +57,7 @@ The agent will:
 10. initialize `RESEARCH_NEED_AGGREGATOR.md` if missing,
 11. ask whether to start the initial mapping.
 
-If the CLI has a todo/task tool, the agent should use it to track onboarding progress without creating extra files.
+If the CLI has a todo/task tool, the agent should use it to track startup progress without creating extra files.
 
 If you agree, the agent starts the first mapping pass and then runs the smoke test in `00_system/ONBOARDING.md`.
 
