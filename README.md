@@ -63,6 +63,8 @@ The prompt `Read AGENTS.md and start the Realm.` is permission to complete start
 
 The agent should not stop after only creating a source map. Startup is complete only after the setup draft has been translated into the blueprint/config, `setup_status` is marked `realm_started`, the startup checklist is complete, and the first mapping pass has run or is explicitly blocked.
 
+The startup report should end with concrete next steps, such as extracting first evidence fragments, creating the first concept index, asking a source-grounded research question, deepening a specific source map, or running a contradiction/negative-case pass.
+
 ## Daily Use
 
 | Task | Path |

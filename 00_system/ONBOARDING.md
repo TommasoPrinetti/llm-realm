@@ -39,7 +39,7 @@ If the user already ran `npm run llm-onboard`, the agent must treat those answer
    - anything not translated is listed as deferred with a reason.
 10. If `01_llm_realm/06_research_tendencies/RESEARCH_NEED_AGGREGATOR.md` does not exist, create it from `01_llm_realm/06_research_tendencies/RESEARCH_NEED_AGGREGATOR_TEMPLATE.md`.
 11. Run `00_system/INITIAL_MAPPING_PROTOCOL.md`. Do this in the same turn as startup unless blocked by a missing required field, an unreachable Root Vault, or required external URL permission.
-12. Report the completed startup checklist in the final response.
+12. Report the completed startup checklist in the final response, followed by a `Next Steps` section with 3 to 5 concrete actions the researcher can ask for next.
 
 Do not ask follow-up questions before step 11 unless a required field is absent, the Root Vault path cannot be located, external URL access needs permission, or a risky assumption blocks immediate mapping. The user's `start the Realm` prompt is already permission to run initial mapping.
 
@@ -53,6 +53,14 @@ Use the CLI's question/input tool for required questions. If no question tool ex
 - Do not ask whether to run initial mapping after the user has said `start the Realm`.
 - Do not leave `setup_status: cli_started` in the blueprint or configuration after translation.
 - Do not report startup complete unless the setup draft was translated, the translation audit passed, the aggregator exists, and initial mapping ran or is explicitly blocked.
+
+## Final Response
+End the startup response with a short `Next Steps` section. Suggestions should be operational and specific to the mapped Root Vault when possible. Use options like:
+- extract first evidence fragments from a named source batch,
+- build the first concept index from repeated themes,
+- answer a source-grounded research question,
+- deepen mapping for a specific folder or source type,
+- run a Tacito contradiction, anomaly, or negative-case pass.
 
 ## Minimum Research Blueprint
 - Project title
