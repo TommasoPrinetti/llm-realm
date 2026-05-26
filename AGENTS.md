@@ -40,20 +40,22 @@ Do not map, index, answer from sources, or ingest new material until `00_system/
 
 `Read AGENTS.md and start the Realm` is an executable command, not a request for a plan. It authorizes the agent to complete startup and run the first mapping pass. Do not ask for a second confirmation before initial mapping.
 
+**The translation is the outcome.** Everything else (mapping, fragments, indexes) depends on it. When the researcher says "start the Realm," the deliverable is a filled blueprint and configuration — scope, source universe, vocabulary, methods, outputs, and mapping targets. Mapping happens only after translation is complete and `setup_status` is `realm_started`.
+
 If either file still contains required placeholders such as `[path]`, `[project name]`, or `[project description]`, or either file contains `setup_status: cli_started`, automatically start the Realm:
 1. Read `00_system/ONBOARDING.md`.
 2. Create and maintain a short startup todo list with the CLI's todo/task tool if available. This is mandatory when the tool exists, and it must happen before editing files or mapping sources.
-3. Translate the existing setup draft into a usable research configuration before doing Cicero mapping. Do not skip this translation and do not merely read the draft.
+3. Translate the setup draft: fill `02_user_realm/RESEARCH_BLUEPRINT.md` and `00_system/REALM_CONFIGURATION.md` with concrete values from the CLI draft. Replace `setup_status: cli_started` with `setup_status: realm_started`. This is the core startup deliverable — do not proceed to mapping until it is done.
 4. Use the project description, artifact references, and Root Vault path to infer missing scope, source universe, vocabulary, methods, outputs, and initial mapping targets.
 5. Use shell/file tools to verify local paths. Use web/MCP/browser tools for artifact URLs only when allowed by `external_sources_allowed`, and log external use when required.
 6. Use the CLI's question/input tool only if a required field is absent, the Root Vault cannot be located, or a risky assumption would block immediate mapping.
-7. Fill `02_user_realm/RESEARCH_BLUEPRINT.md` and `00_system/REALM_CONFIGURATION.md`; replace `setup_status: cli_started` with `setup_status: realm_started` when the setup draft has been translated.
-8. Check that the draft has been fully translated: every useful project detail, artifact reference, path, policy, and inferred mapping target must either appear in the filled files or be explicitly marked as deferred with a reason.
-9. Initialize `01_llm_realm/06_research_tendencies/RESEARCH_NEED_AGGREGATOR.md` from the template if missing.
-10. Run the first mapping pass through `00_system/INITIAL_MAPPING_PROTOCOL.md`.
-11. Update the startup todo list as each step completes. Use `00_system/STARTUP_REPORT_TEMPLATE.md` for the final response, including the completed checklist and a `Next Steps` section with 3 to 5 concrete actions the researcher can ask for next.
+7. Audit the translation: every useful project detail, artifact reference, path, policy, and inferred mapping target must appear in the filled files or be explicitly marked as deferred with a reason.
+8. Initialize `01_llm_realm/06_research_tendencies/RESEARCH_NEED_AGGREGATOR.md` from the template if missing.
+9. Run the first mapping pass through `00_system/INITIAL_MAPPING_PROTOCOL.md`.
+10. Update the startup todo list as each step completes. Use `00_system/STARTUP_REPORT_TEMPLATE.md` for the final response, including the completed checklist and a `Next Steps` section with 3 to 5 concrete actions the researcher can ask for next.
 
 During startup, do not stop after a navigational source map unless the setup draft has already been translated, `setup_status` has been moved to `realm_started`, and the startup checklist is complete. Do not create a Markdown todo file unless the user asks for one.
+Do not treat pre-existing Realm artifacts (source maps, fragments, concept indexes) as completed work — a fresh clone must translate the setup draft first. Existing artifacts from a prior project do not replace translation.
 
 Startup final responses must end with actionable next steps, such as extracting first evidence fragments, building the first concept index, asking a source-grounded research question, mapping a specific source batch more deeply, or running a Tacito contradiction/negative-case pass.
 
