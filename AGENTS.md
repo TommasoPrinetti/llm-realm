@@ -6,11 +6,18 @@ scope: [repo-wide framework guidance]
 connects_to:
   - 00_system/instructions/PROCESS_ROUTER.md
   - 00_system/instructions/SYSTEM_ARCHITECTURE_MAP.md
+  - 00_system/instructions/REALM_CONFIGURATION.md
+  - 00_system/instructions/STARTUP.md
+  - 00_system/instructions/ONBOARDING.md
   - 00_system/sub_agents/conceptualizer/SOUL.md
   - 00_system/sub_agents/navigator/SOUL.md
   - 00_system/sub_agents/packer/SOUL.md
   - 00_system/sub_agents/checker/SOUL.md
+  - 02_user_realm/RESEARCH_BLUEPRINT.md
   - 03_logs/user_requests.md
+  - 03_logs/execution_runs.md
+  - 03_logs/source_intake_log.md
+  - 03_logs/external_queries.md
   - 05_agent_reports/
 created: 2026-05-26
 updated: 2026-05-27

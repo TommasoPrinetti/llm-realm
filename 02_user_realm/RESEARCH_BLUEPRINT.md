@@ -4,6 +4,11 @@ agent: onboarding_cli
 created: 2026-05-26
 updated: 2026-05-26
 setup_status: cli_started
+connects_to:
+  - AGENTS.md
+  - 00_system/instructions/REALM_CONFIGURATION.md
+  - 00_system/instructions/ONBOARDING.md
+  - 03_logs/user_requests.md
 ---
 
 # Research Blueprint

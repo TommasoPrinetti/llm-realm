@@ -5,7 +5,7 @@ purpose: [show the shape of a reusable search plan entry]
 scope: [conceptualizer output]
 connects_to:
   - 03_logs/user_requests.md
-  - 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md
+  - 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR_TEMPLATE.md
   - 00_system/sub_agents/conceptualizer/SOUL.md
 created: 2026-05-26
 updated: 2026-05-27
