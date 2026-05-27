@@ -1,8 +1,15 @@
 ---
 type: research_need_aggregator
 sub_agent: Conceptualizer
+role: concept_pattern_log
+purpose: [accumulate structured research needs and detect repeated prompt themes]
+scope: [all non-trivial research prompts]
+connects_to:
+  - 03_logs/user_requests.md
+  - 01_llm_realm/03_concept_indexes/
+  - 00_system/sub_agents/conceptualizer/SOUL.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # Research Need Aggregator
@@ -14,7 +21,6 @@ This document aggregates all structured research needs chronologically. Conceptu
 
 | # | Date | Basic question | Type | Source question |
 |---|---|---|---|---|
-| - | - | - | - | - |
 
 ## Type classification
 Each research need is classified into one or more of these types:
@@ -23,7 +29,6 @@ Each research need is classified into one or more of these types:
 ## Repetition tracker
 | Type | Count | First observed | Last observed | Tendency registered? |
 |---|---|---|---|---|
-| - | 0 | - | - | no |
 
 *Conceptualizer updates this after each non-trivial request. When count reaches 3, register a tendency.*
 

@@ -1,8 +1,15 @@
 ---
 type: realm_configuration
 agent: onboarding_cli
+role: framework_configuration
+purpose: [store project-level setup, source policy, and protected paths]
+scope: [entire framework]
+connects_to:
+  - AGENTS.md
+  - 00_system/instructions/STARTUP.md
+  - 00_system/instructions/PROCESS_ROUTER.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 setup_status: cli_started
 ---
 

@@ -1,7 +1,14 @@
 ---
 type: startup_prompt
+role: setup_protocol
+purpose: [translate the startup draft into an initial Realm configuration and index]
+scope: [initial setup only]
+connects_to:
+  - 00_system/instructions/REALM_CONFIGURATION.md
+  - 00_system/instructions/ONBOARDING.md
+  - 01_llm_realm/00_realm_index.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # STARTUP.md - Root Vault To LLM Realm Conversion Prompt
@@ -20,6 +27,8 @@ Important source cluster -> deeper folder index, metadata, fragments, concept in
 ```
 
 The LLM Realm must let an agent find a promising topic quickly, then go back to the Root Vault path for fuller evidence.
+
+This file subsumes the old initial-indexing protocol. Use it for startup, first mirror creation, and the first index pass.
 
 ## Non-Negotiable
 - Never edit, rename, reorganize, or delete Root Vault files.

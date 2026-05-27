@@ -1,7 +1,15 @@
 ---
 type: process_router
+role: routing_contract
+purpose: [decide which path a user prompt should take]
+scope: [home-session orchestration]
+connects_to:
+  - AGENTS.md
+  - 00_system/instructions/SYSTEM_ARCHITECTURE_MAP.md
+  - 00_system/sub_agents/README.md
+  - 03_logs/user_requests.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # Process Router
@@ -50,6 +58,20 @@ log -> answer
 | Deepen a folder index or concept index | Conceptualizer -> Navigator -> Checker | Updated LLM Realm index |
 | Startup / initial vault setup | `00_system/instructions/STARTUP.md` | Completed configuration, blueprint, folder mirror, and initial Realm index |
 
+## Source Intake
+Use `source_intake` for new Root Vault material or approved external sources that need registration or mapping.
+
+The intake route does the following:
+1. Register the source batch in `03_logs/source_intake_log.md`.
+2. If the source is external, also log it in `03_logs/external_queries.md`.
+3. Create or update the relevant folder mirror index under `01_llm_realm/00_root_mirror/`.
+4. Extract only reusable evidence fragments.
+5. Create or update concept indexes when the batch introduces repeated concepts.
+6. Update `01_llm_realm/00_realm_index.md`.
+7. Write a short intake report only when the files or indexes changed in a meaningful way.
+
+The startup route already covers the first indexing pass. After startup, use `source_intake` for new material instead of a separate intake protocol.
+
 ## Home Session Orchestration
 The home session owns sequencing. It may answer directly only on the fast path. Otherwise it selects the smallest useful route, passes outputs forward, and stops when the user request has been satisfied.
 
@@ -58,6 +80,42 @@ The home session must not:
 - do Packer work when a durable report is required,
 - do Checker work without opening the original source or registered source path,
 - run the full pipeline when a narrower route is enough.
+
+## Execution Controls
+Use execution controls for routed work that can branch, fail transiently, or produce partial but useful results. Do not add ceremony to simple linear routes.
+
+### Task Metadata
+When controls are needed, track each task with:
+
+| Field | Meaning |
+|---|---|
+| `task_id` | Stable local ID for the task within the route |
+| `owner` | `Conceptualizer`, `Navigator`, `Packer`, `Checker`, or `home_session` |
+| `depends_on` | Task IDs that must finish before this task runs |
+| `status` | `pending`, `ready`, `running`, `completed`, `partial`, `failed`, `blocked`, or `skipped` |
+| `retry_policy` | `none`, `safe_retry_2`, or a stricter route-specific policy |
+| `timeout` | `brief`, `standard`, or `extended`; use runtime timeouts when available |
+| `output_budget` | `brief`, `standard`, or `deep`; prefer this over fake numeric token claims |
+| `checkpoint_required` | `yes` when interruption or branching would otherwise lose useful work |
+
+### Default Control Policy
+| Route | Controls |
+|---|---|
+| `fast_path` | No execution plan beyond request log |
+| `clarify_search` | Linear task, no retry unless tool failure occurs |
+| `find_material` | Add timeout and retry around Navigator when source search is tool-heavy |
+| `evidence_answer` | Use dependency metadata when Conceptualizer splits the search into branches; allow partial results only when gaps are labeled |
+| `synthesis_report` | Use checkpoints when merging more than three evidence packets or when prior packets are incomplete |
+| `verification` | No retries for unsupported claims; retry only path/tool failures |
+| `index_maintenance` | Use checkpoints before broad index edits; do not parallelize edits to the same index file |
+| `source_intake` | No partial registration of retained sources; blocked if required metadata is missing |
+| `startup` | Use checkpoints after configuration, structure survey, and initial index creation |
+
+### Failure Handling
+- A failed dependency blocks downstream tasks unless the downstream task can honestly produce a partial result.
+- Partial results must name completed branches, failed branches, unresolved gaps, and any claims withheld from final presentation.
+- Checker may return `partial` when verified claims remain usable but unresolved branches prevent a full pass.
+- Record any retry, timeout, checkpoint, or partial final state in `03_logs/execution_runs.md`.
 
 ## Sub-Agent Contracts
 | Sub-agent | Reads | Writes | Must not do |
@@ -85,3 +143,4 @@ The home session must not:
 | Agent report | Packer has synthesized evidence into an answer |
 | Verification note | Checker has accepted, corrected, or rejected evidence claims |
 | Folder index / concept index / fragment | The LLM Realm needs durable navigation improvements |
+| Execution log row | A routed run used retries, timeouts, checkpoints, branching, or partial-result handling |

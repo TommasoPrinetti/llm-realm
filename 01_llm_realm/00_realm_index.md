@@ -1,9 +1,18 @@
 ---
 type: realm_index
+role: realm_master_index
+purpose: [map the whole LLM Realm and point to the main retrieval layers]
+scope: [all of 01_llm_realm]
+connects_to:
+  - 00_root_mirror/
+  - 01_metadata/HEADER_TEMPLATE.md
+  - 03_concept_indexes/
+  - 04_evidence_fragments/
+  - 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md
 evidence_type: processed
 evidence_level: L1
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # LLM Realm - Master Index
@@ -13,7 +22,7 @@ updated: 2026-05-26
 ```
 01_llm_realm/
   00_realm_index.md              This file
-  00_root_mirror/                Folder-level mirror of the Root Vault for fast retrieval
+  00_root_mirror/                Empty mirror scaffold for future folder indexes
   01_metadata/                   Shared header guidance
   03_concept_indexes/            Thematic concept indexes
   04_evidence_fragments/         Small verbatim quotes with source links

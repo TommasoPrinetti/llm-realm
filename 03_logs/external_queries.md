@@ -1,8 +1,15 @@
 ---
 type: log
 sub_agent: Checker
-created: [date]
-updated: [date]
+role: external_source_log
+purpose: [record external sources explicitly authorized for use]
+scope: [external source access only]
+connects_to:
+  - AGENTS.md
+  - 00_system/instructions/REALM_CONFIGURATION.md
+  - 03_logs/source_intake_log.md
+created: 2026-05-26
+updated: 2026-05-27
 ---
 
 # External Queries Log
@@ -11,4 +18,3 @@ updated: [date]
 
 | Date | Query | Source | Reason | Status |
 |---|---|---|---|---|
-| — | — | — | — | — |

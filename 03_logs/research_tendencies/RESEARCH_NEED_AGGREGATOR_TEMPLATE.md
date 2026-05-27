@@ -1,5 +1,12 @@
 ---
 type: research_need_aggregator
+role: concept_pattern_log
+purpose: [accumulate structured research needs and detect repeated themes]
+scope: [all non-trivial user research prompts]
+connects_to:
+  - 03_logs/user_requests.md
+  - 00_system/sub_agents/conceptualizer/SOUL.md
+  - 01_llm_realm/03_concept_indexes/
 sub_agent: Conceptualizer
 created: [date]
 updated: [date]

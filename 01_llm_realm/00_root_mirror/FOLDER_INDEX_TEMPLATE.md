@@ -1,10 +1,17 @@
 ---
 type: folder_index_template
+role: folder_index_template
+purpose: [provide the canonical header and body structure for folder indexes]
+scope: [all folder mirror index files]
+connects_to:
+  - 01_llm_realm/00_realm_index.md
+  - 01_llm_realm/01_metadata/HEADER_TEMPLATE.md
+  - 03_logs/source_intake_log.md
 index_status: template
 evidence_type: processed
 evidence_level: L1
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # Folder Index Template
@@ -14,6 +21,13 @@ Use one `INDEX.md` per meaningful Root Vault folder.
 ```md
 ---
 type: folder_index
+role: realm_folder_map
+purpose: [map one Root Vault folder to a fast retrieval surface]
+scope: [one Root Vault folder and its mirror]
+connects_to:
+  - 01_llm_realm/00_realm_index.md
+  - 03_logs/source_intake_log.md
+  - 05_agent_reports/README.md
 index_status: draft | partial | mapped | verified
 root_path: "[absolute or configured Root Vault path]"
 root_rel_path: "[folder path relative to Root Vault]"

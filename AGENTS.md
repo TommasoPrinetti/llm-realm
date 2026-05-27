@@ -1,7 +1,16 @@
 ---
 type: orchestrator_playbook
+role: home_session_orchestrator
+purpose: [define how the home session logs, routes, verifies, and closes requests]
+scope: [repo-wide framework guidance]
+connects_to:
+  - 00_system/instructions/PROCESS_ROUTER.md
+  - 00_system/instructions/SYSTEM_ARCHITECTURE_MAP.md
+  - 00_system/sub_agents/README.md
+  - 03_logs/user_requests.md
+  - 05_agent_reports/README.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # AGENTS.md - LLM Realm Orchestrator Playbook
@@ -13,8 +22,8 @@ This is your operating playbook. Follow it step by step unless the user gives a 
 
 You are not a specialist sub-agent. You control the workflow around four specialists:
 
-| Sub-Agents     | Job                                               | SOUL                                      |
-| -------------- | ------------------------------------------------- | ----------------------------------------- |
+| Sub-Agents     | Job                                               | SOUL                                          |
+| -------------- | ------------------------------------------------- | --------------------------------------------- |
 | Conceptualizer | Define what needs to be searched                  | `00_system/sub_agents/conceptualizer/SOUL.md` |
 | Navigator      | Find raw source material                          | `00_system/sub_agents/navigator/SOUL.md`      |
 | Packer         | Turn found material into a coherent report        | `00_system/sub_agents/packer/SOUL.md`         |
@@ -55,6 +64,10 @@ Use these terms exactly.
 | `raw evidence packet` | Navigator's handoff: source paths, index paths, locators, short raw excerpts if needed, evidence labels, and gaps. It is not a final answer. |
 | `verification` | Checking a quote, claim, locator, source path, fragment, index entry, or report against the Root Vault or a registered source. Verification is Checker work. |
 | `blocked` | You cannot proceed honestly because required setup, source access, permission, or information is missing. State the blocker and stop. |
+| `execution plan` | The lightweight task schedule for a routed request: task IDs, owner, dependencies, retry policy, timeout, output budget, and status. |
+| `task status` | One of `pending`, `ready`, `running`, `completed`, `partial`, `failed`, `blocked`, or `skipped`. |
+| `checkpoint` | A durable intermediate note in `05_agent_reports/` that preserves completed task outputs, pending tasks, gaps, and resume instructions. |
+| `partial result` | A truthful output where some requested branches failed or remain unresolved, while completed branches are still useful and clearly labeled. |
 
 ## 1. Core Model
 LLM Realm is a two-layer research system.
@@ -67,6 +80,8 @@ LLM Realm  = writable organic index of the Root Vault
 The Root Vault is the canonical evidence layer. The LLM Realm is the indexed working layer: folder indexes, evidence fragments, concept indexes, logs, reports, and maintenance notes.
 
 Search the LLM Realm first for token economy. Open the Root Vault only when you need original context, unmapped material, or Checker verification.
+
+The framework is intentionally asymmetric: the Root Vault is evidence, and the LLM Realm is the writable retrieval layer that helps agents get back to that evidence quickly.
 
 ## 2. First Read
 At the start of a session or after context loss, read:
@@ -150,6 +165,20 @@ Use this table. The `Route` column is the exact execution path you must run for 
 
 Route note — `synthesis_report`: skip Conceptualizer and Navigator when evidence packets already exist. Use `Packer -> Checker` directly (see `00_system/instructions/PROCESS_ROUTER.md` route table).
 
+For non-fast routes, create a minimal execution plan before calling specialists. Keep it inline unless the route has multiple branches, retries, timeouts, checkpoints, or partial results; then add a row to `03_logs/execution_runs.md`.
+
+Execution plan fields:
+- `task_id`
+- `owner`
+- `depends_on`
+- `status`
+- `retry_policy`
+- `timeout`
+- `output_budget`
+- `checkpoint_required`
+
+Use the smallest useful execution plan. A normal linear route can stay linear. Fan out only when Conceptualizer identifies independent subtasks.
+
 ### Step 5 - Execute The Sub-Agent Sequence
 Read each required SOUL immediately before doing that specialist's work.
 
@@ -172,6 +201,16 @@ Checker output -> final answer
 ```
 
 Do not invent a specialist output. If the sequence includes `Conceptualizer`, produce a Conceptualizer Brief. If the sequence includes `Navigator`, produce a Navigator Evidence Packet or the requested index update. If the sequence includes `Packer`, write a report. If the sequence includes `Checker`, produce a verification note or verified correction.
+
+Execution controls:
+- Dependencies: run only tasks whose dependencies are `completed` or explicitly accepted as `partial`.
+- Parallelism: run independent tasks in parallel only when it reduces work; default cap is three concurrent specialist calls.
+- Retries: retry only safe, idempotent failures such as tool errors, transient search failures, or interrupted sub-agent calls. Default is two retries after the first failure. Do not retry unsupported claims, missing sources, permission blockers, or destructive actions.
+- Timeouts: if the environment supports command or task timeouts, use them. If it does not, use elapsed-time judgment and stop or retry tasks that have clearly exceeded the route's scope.
+- Output budgets: constrain specialist output by requested depth. Use `brief`, `standard`, or `deep` unless the runtime exposes numeric token budgets.
+- Partial results: when a branch fails but other branches are usable, continue only if the final answer can clearly separate completed, partial, and unresolved items.
+- Checkpoints: create a checkpoint in `05_agent_reports/` when a route has more than three branches, has been interrupted, or would lose useful work if stopped.
+- Monitoring: record retries, timeouts, checkpoints, and partial final states in `03_logs/execution_runs.md` when any of them occur.
 
 ### Step 6 - Close The Request
 Before final response:
@@ -309,6 +348,7 @@ Produce:
 After Checker:
 - if `pass`, finalize the answer,
 - if `pass_with_corrections`, update the report or cite the correction,
+- if `partial`, present only verified usable claims and label unresolved branches,
 - if `fail`, do not present failed claims as established,
 - if `blocked`, report the blocker and missing source.
 

@@ -1,7 +1,14 @@
 ---
 type: agent_report_index
-created: [date]
-updated: 2026-05-26
+role: report_surface_index
+purpose: [list where reports, verification notes, and maintenance notes live]
+scope: [05_agent_reports]
+connects_to:
+  - AGENTS.md
+  - 00_system/sub_agents/packer/SOUL.md
+  - 00_system/sub_agents/checker/SOUL.md
+created: 2026-05-26
+updated: 2026-05-27
 ---
 
 # Agent Reports
@@ -17,4 +24,3 @@ This folder contains Packer reports, Checker verification notes, and maintenance
 ## Report log
 | Date | Agent | Type | Summary |
 |---|---|---|---|
-| — | — | — | — |

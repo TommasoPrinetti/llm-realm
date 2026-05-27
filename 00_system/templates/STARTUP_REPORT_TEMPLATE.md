@@ -1,7 +1,14 @@
 ---
 type: startup_report_template
+role: startup_output_template
+purpose: [guide the final setup report after the Realm is started]
+scope: [startup completion only]
+connects_to:
+  - 00_system/instructions/STARTUP.md
+  - 00_system/instructions/ONBOARDING.md
+  - 05_agent_reports/README.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # Startup Report Template

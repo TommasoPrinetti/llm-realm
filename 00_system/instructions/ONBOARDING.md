@@ -1,7 +1,14 @@
 ---
 type: startup_protocol
+role: setup_translation_protocol
+purpose: [fill the configuration and research blueprint before initial indexing]
+scope: [initial setup only]
+connects_to:
+  - 00_system/instructions/STARTUP.md
+  - 00_system/instructions/REALM_CONFIGURATION.md
+  - 02_user_realm/RESEARCH_BLUEPRINT.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # Realm Startup Protocol
@@ -39,7 +46,7 @@ If the user already ran `npm run llm-onboard`, the agent must treat those answer
    - anything not translated is listed as deferred with a reason.
 11. Create folder-mirrored indexes under `01_llm_realm/00_root_mirror/` using `01_llm_realm/00_root_mirror/FOLDER_INDEX_TEMPLATE.md`.
 12. If `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md` does not exist, create it from `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR_TEMPLATE.md`.
-13. Run `00_system/instructions/INITIAL_INDEXING_PROTOCOL.md`. Do this in the same turn as startup unless blocked by a missing required field, an unreachable Root Vault, or required external URL permission.
+13. Run the first indexing pass described in `00_system/instructions/STARTUP.md`. Do this in the same turn as startup unless blocked by a missing required field, an unreachable Root Vault, or required external URL permission.
 14. Run the retrieval smoke test in `00_system/instructions/STARTUP.md`.
 15. Use `00_system/templates/STARTUP_REPORT_TEMPLATE.md` for the final response. Report the completed startup checklist, followed by a `Next Steps` section with 3 to 5 concrete actions the researcher can ask for next.
 

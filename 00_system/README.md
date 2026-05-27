@@ -1,7 +1,15 @@
 ---
 type: system_index
+role: system_directory_map
+purpose: [explain the instruction, sub-agent, and template layout]
+scope: [00_system and its child files]
+connects_to:
+  - AGENTS.md
+  - 00_system/instructions/README.md
+  - 00_system/sub_agents/README.md
+  - 00_system/templates/STARTUP_REPORT_TEMPLATE.md
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 ---
 
 # System Folder
