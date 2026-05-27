@@ -6,7 +6,7 @@ purpose: [verify claims, paths, and index integrity before final presentation]
 scope: [claim verification and maintenance]
 connects_to:
   - AGENTS.md
-  - 05_agent_reports/README.md
+  - 05_agent_reports/
   - 03_logs/external_queries.md
   - 03_logs/source_intake_log.md
 created: 2026-05-26

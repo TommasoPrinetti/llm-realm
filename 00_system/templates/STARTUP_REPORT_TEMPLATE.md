@@ -6,7 +6,7 @@ scope: [startup completion only]
 connects_to:
   - 00_system/instructions/STARTUP.md
   - 00_system/instructions/ONBOARDING.md
-  - 05_agent_reports/README.md
+  - 05_agent_reports/
 created: 2026-05-26
 updated: 2026-05-27
 ---

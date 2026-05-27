@@ -6,7 +6,7 @@ purpose: [turn retrieved material into a coherent report]
 scope: [answer synthesis and partial-result reporting]
 connects_to:
   - AGENTS.md
-  - 05_agent_reports/README.md
+  - 05_agent_reports/
   - 00_system/instructions/PROCESS_ROUTER.md
 created: 2026-05-26
 updated: 2026-05-27

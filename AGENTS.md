@@ -6,9 +6,12 @@ scope: [repo-wide framework guidance]
 connects_to:
   - 00_system/instructions/PROCESS_ROUTER.md
   - 00_system/instructions/SYSTEM_ARCHITECTURE_MAP.md
-  - 00_system/sub_agents/README.md
+  - 00_system/sub_agents/conceptualizer/SOUL.md
+  - 00_system/sub_agents/navigator/SOUL.md
+  - 00_system/sub_agents/packer/SOUL.md
+  - 00_system/sub_agents/checker/SOUL.md
   - 03_logs/user_requests.md
-  - 05_agent_reports/README.md
+  - 05_agent_reports/
 created: 2026-05-26
 updated: 2026-05-27
 ---

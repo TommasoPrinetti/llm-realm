@@ -27,7 +27,7 @@ scope: [one Root Vault folder and its mirror]
 connects_to:
   - 01_llm_realm/00_realm_index.md
   - 03_logs/source_intake_log.md
-  - 05_agent_reports/README.md
+  - 05_agent_reports/
 index_status: draft | partial | mapped | verified
 root_path: "[absolute or configured Root Vault path]"
 root_rel_path: "[folder path relative to Root Vault]"

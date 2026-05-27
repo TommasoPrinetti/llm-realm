@@ -8,7 +8,7 @@ connects_to:
   - 01_metadata/HEADER_TEMPLATE.md
   - 03_concept_indexes/
   - 04_evidence_fragments/
-  - 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md
+  - 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR_TEMPLATE.md
 evidence_type: processed
 evidence_level: L1
 created: 2026-05-26
@@ -48,7 +48,7 @@ updated: 2026-05-27
 | - | - | - | - |
 
 ## Research tendencies
-See `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md` for the full accumulation and repetition tracker.
+Startup generates `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md` from `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR_TEMPLATE.md`.
 
 ## Source intake
 See `03_logs/source_intake_log.md` for new Root Vault batches and retained external sources.

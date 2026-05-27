@@ -6,7 +6,10 @@ scope: [repo-wide architecture]
 connects_to:
   - AGENTS.md
   - 00_system/instructions/PROCESS_ROUTER.md
-  - 00_system/sub_agents/README.md
+  - 00_system/sub_agents/conceptualizer/SOUL.md
+  - 00_system/sub_agents/navigator/SOUL.md
+  - 00_system/sub_agents/packer/SOUL.md
+  - 00_system/sub_agents/checker/SOUL.md
   - 01_llm_realm/00_realm_index.md
   - 03_logs/user_requests.md
 created: 2026-05-26
@@ -149,7 +152,7 @@ The setup output is not a final interpretation of the research corpus. It is the
 | `01_llm_realm/00_root_mirror/` | Folder-level Root Vault mirror indexes |
 | `03_logs/user_requests.md` | Request log |
 | `03_logs/execution_runs.md` | Execution-control log for retries, timeouts, checkpoints, branching, and partial results |
-| `05_agent_reports/` | Reports and Checker verification notes |
+| `05_agent_reports/` | Reports, checkpoints, evidence packets, and Checker verification notes |
 
 ## Retired Model
 The previous agent names are historical. Active routing now uses Conceptualizer, Navigator, Packer, and Checker. Archived files may mention retired names, but archived material is not active instruction.

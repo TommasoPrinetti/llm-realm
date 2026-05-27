@@ -11,7 +11,7 @@ scope: [one concept family]
 connects_to:
   - 01_llm_realm/00_realm_index.md
   - 01_llm_realm/04_evidence_fragments/
-  - 05_agent_reports/README.md
+  - 05_agent_reports/
 sub_agent: Navigator
 created: [date]
 updated: [date]

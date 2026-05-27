@@ -6,7 +6,10 @@ scope: [home-session orchestration]
 connects_to:
   - AGENTS.md
   - 00_system/instructions/SYSTEM_ARCHITECTURE_MAP.md
-  - 00_system/sub_agents/README.md
+  - 00_system/sub_agents/conceptualizer/SOUL.md
+  - 00_system/sub_agents/navigator/SOUL.md
+  - 00_system/sub_agents/packer/SOUL.md
+  - 00_system/sub_agents/checker/SOUL.md
   - 03_logs/user_requests.md
 created: 2026-05-26
 updated: 2026-05-27

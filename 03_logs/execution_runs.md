@@ -6,7 +6,7 @@ scope: [non-linear or failure-prone routed work]
 connects_to:
   - AGENTS.md
   - 00_system/instructions/PROCESS_ROUTER.md
-  - 05_agent_reports/README.md
+  - 05_agent_reports/
 created: 2026-05-27
 updated: 2026-05-27
 ---
