@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
+import { spawnSync } from "node:child_process";
 
 // ── ANSI colors (zero-dependency) ────────────────────────────────────────────
 const noColor = process.argv.includes("--no-color") || process.env.NO_COLOR;
@@ -31,14 +32,6 @@ const paths = {
 };
 
 const startupPrompt = "Execute 00_system/instructions/STARTUP.md then 00_system/instructions/ONBOARDING.md — survey the Root Vault, then write folder-mirrored INDEX.md files into 01_llm_realm/00_root_mirror/ (the directory tree already exists, do not recreate it — just start filling), update 01_llm_realm/00_realm_index.md, run the smoke test, set setup_status to realm_started, and write the startup report at 05_agent_reports/ using the template at 00_system/templates/STARTUP_REPORT_TEMPLATE.md. Do not stop after reading files. Do not stop after one index. Do not re-ask questions the CLI draft already answered.";
-
-const cliLaunch = {
-  "Claude Code": { command: "claude",   args: ["-p", startupPrompt] },
-  Codex:         { command: "codex",    args: ["exec", startupPrompt] },
-  OpenCode:      { command: "opencode", args: ["run", startupPrompt] },
-  Kilo:          { command: null, prompt: "Open this folder with Kilo, then ask:\n\n" + startupPrompt },
-  Other:         { command: null, prompt: "Open this folder with your LLM agent, then ask:\n\n" + startupPrompt },
-};
 
 function sanitizeYaml(s) { return s.replace(/"/g, "\\\"").replace(/\n/g, "\\n").replace(/```/g, "`\\`\\`"); }
 function ensureParent(file) { mkdirSync(dirname(file), { recursive: true }); }
@@ -475,22 +468,16 @@ preferred_llm_cli: "${preferredCli}"
   if (claudeCreated) output.write(`  ${dim("─")} ${c.cyan}${paths.claude}${c.reset}\n`);
   output.write("\n");
 
-  const launch = cliLaunch[preferredCli] || cliLaunch.Other;
   output.write(`  ${bold("Next:")}\n\n`);
-  if (launch.command && launch.args && launch.args.length) {
-    output.write(`  ${bold("Command")}:\n\n`);
-    output.write(`    ${c.bGreen}${launch.command} ${launch.args.map(a => `'${a}'`).join(" ")}${c.reset}\n`);
-    output.write(`\n  ${dim(`Copy this prompt, open ${preferredCli} on this folder and paste it.`)}\n\n`);
-  } else if (launch.command) {
-    output.write(`  ${bold("Command")}:\n\n`);
-    output.write(`    ${c.bGreen}${launch.command}${c.reset}\n`);
-    if (launch.prompt) {
-      output.write(`\n  ${bold("Then send this prompt")}:\n\n`);
-      output.write(`    ${c.bGreen}${launch.prompt}${c.reset}\n`);
-    }
+
+  const cp = spawnSync("pbcopy", { input: startupPrompt });
+  if (cp.status === 0) {
+    output.write(`  ${dim("Prompt copied to clipboard. ")}`);
   } else {
-    output.write(`  ${c.bGreen}${launch.prompt}${c.reset}\n`);
+    output.write(`  ${dim("Select and copy the prompt below. ")}`);
   }
+  output.write(`${dim("Open your LLM CLI on this folder and paste it:")}\n\n`);
+  output.write(`    ${c.bGreen}${startupPrompt}${c.reset}\n\n`);
   output.write("\n");
   divider("━");
   output.write("\n");
