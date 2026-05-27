@@ -36,8 +36,8 @@ const startupPrompt = "Execute 00_system/instructions/STARTUP.md then 00_system/
 const cliLaunch = {
   "Claude Code": { command: "claude",   args: ["-p", startupPrompt] },
   Codex:         { command: "codex",    args: ["exec", startupPrompt] },
-  OpenCode:      { command: "opencode", args: ["--prompt", startupPrompt] },
-  Kilo:          { command: "kilo",     args: [startupPrompt] },
+  OpenCode:      { command: "opencode", args: ["run", startupPrompt] },
+  Kilo:          { command: null, prompt: "Open this folder with Kilo, then ask:\n\n" + startupPrompt },
   Other:         { command: null, prompt: "Open this folder with your LLM agent, then ask:\n\n" + startupPrompt },
 };
 
@@ -470,29 +470,35 @@ preferred_llm_cli: "${preferredCli}"
 
   const launch = cliLaunch[preferredCli] || cliLaunch.Other;
   output.write(`  ${bold("Next:")}\n\n`);
-  if (launch.command) {
-    if (launch.args && launch.args.length) {
-      output.write(`  1. ${bold("Open")} ${c.bGreen}\`${launch.command}\`${c.reset} from this folder (prompt is pre-loaded).\n`);
-    } else {
-      output.write(`  1. ${bold("Open")} ${c.bGreen}\`${launch.command}\`${c.reset} from this folder.\n`);
-      output.write(`  2. ${bold("Send:")} ${c.bGreen}${launch.prompt}${c.reset}\n\n`);
-    }
+  if (launch.command && launch.args && launch.args.length) {
+    output.write(`  ${bold("Command")}:\n\n`);
+    output.write(`    ${c.bGreen}${launch.command} ${launch.args.map(a => `'${a}'`).join(" ")}${c.reset}\n`);
+    output.write(`\n  ${dim("Copy the line above into your terminal, or let the script open it for you.")}\n\n`);
     if (input.isTTY) {
       const launchRl = createRL();
-      const openNow = (await ask(launchRl, `Press Enter to open ${preferredCli} now, or type n to skip`, "")).toLowerCase();
+      const openNow = (await ask(launchRl, `Type y to open ${preferredCli} now, or press Enter to skip`, "")).toLowerCase();
       launchRl.close();
-      if (!["n", "no"].includes(openNow)) {
+      if (["y", "yes"].includes(openNow)) {
         output.write("\n" + dim(`Opening ${preferredCli} in ${root}...\n`));
-        const cmd = launch.args && launch.args.length
-          ? `${launch.command} ${launch.args.map(a => `"${a}"`).join(" ")}`
-          : launch.command;
-        const result = spawnSync(cmd, { cwd: root, stdio: "inherit", shell: true });
-        if (result.error || result.status) {
-          output.write(c.yellow + "\nCould not open the selected CLI automatically. Run this manually:\n" + c.reset);
-          output.write(`  ${launch.command}\n`);
-          if (launch.prompt) output.write(`  ${launch.prompt}\n`);
+        const found = spawnSync("which", [launch.command], { stdio: "pipe" });
+        if (found.status !== 0) {
+          output.write(c.yellow + `\n${launch.command} not found on PATH. Run it manually:\n` + c.reset);
+          output.write(`  ${launch.command} ${launch.args.map(a => `'${a}'`).join(" ")}\n`);
+        } else {
+          const result = spawnSync(launch.command, launch.args, { cwd: root, stdio: "inherit", shell: false });
+          if (result.error || result.status) {
+            output.write(c.yellow + "\nCould not open the selected CLI automatically. Run this manually:\n" + c.reset);
+            output.write(`  ${launch.command} ${launch.args.map(a => `'${a}'`).join(" ")}\n`);
+          }
         }
       }
+    }
+  } else if (launch.command) {
+    output.write(`  ${bold("Command")}:\n\n`);
+    output.write(`    ${c.bGreen}${launch.command}${c.reset}\n`);
+    if (launch.prompt) {
+      output.write(`\n  ${bold("Then send this prompt")}:\n\n`);
+      output.write(`    ${c.bGreen}${launch.prompt}${c.reset}\n`);
     }
   } else {
     output.write(`  ${c.bGreen}${launch.prompt}${c.reset}\n`);
