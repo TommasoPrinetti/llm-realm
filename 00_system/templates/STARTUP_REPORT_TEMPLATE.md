@@ -8,7 +8,7 @@ connects_to:
   - 00_system/instructions/ONBOARDING.md
   - 05_agent_reports/
 created: 2026-05-26
-updated: 2026-05-27
+updated: 2026-05-28
 ---
 
 # Startup Report Template
@@ -16,27 +16,30 @@ updated: 2026-05-27
 Use this structure for the final response after `Read AGENTS.md and start the Realm`.
 
 ## Outcome
-[One or two sentences: setup translated, Root Vault verified, first indexing status.]
+[One or two sentences: setup translated, Root Vault verified, source copies created, dictionary built, headers generated.]
 
 ## Startup Checklist
 - [done / blocked] Setup draft inspected
 - [done / blocked] Root Vault verified
 - [done / blocked] Blueprint/config translated
 - [done / blocked] Translation audit completed
-- [done / blocked] Folder mirror indexes created in 01_llm_realm/00_root_mirror/
-- [done / blocked] Grep/Checker smoke test completed
-- [done / blocked] Initial indexing pass completed
+- [done / blocked] Source copies created in 01_llm_realm/sources/
+- [done / blocked] Master dictionary built in 01_llm_realm/00_dictionary.md
+- [done / blocked] YAML headers generated for all source copies
+- [done / blocked] Concept indexes created from repeated themes
+- [done / blocked] Realm index updated
+- [done / blocked] Smoke test completed
 
 ## Changes
 - [file changed or created]
 
 ## Validation
-- [path checks, placeholder scans, folder mirror coverage, grep/Checker smoke test, external policy decision]
+- [path checks, placeholder scans, source copy coverage, dictionary size, grep/Checker smoke test, external policy decision]
 
 ## Next Steps
 Offer 3 to 5 concrete next actions. Prefer actions grounded in the mapped Root Vault:
-- extract first evidence fragments from [mapped source batch],
+- answer a source-grounded research question using [specific source copy],
 - build a concept index for [recurring theme],
-- answer a source-grounded research question,
-- deepen indexing for [specific folder or source type],
-- run a Checker quote, citation, or missing-source verification pass.
+- deepen the dictionary with more detailed entity extraction,
+- run a Checker verification pass on source copy headers,
+- add more sources to the Root Vault and re-run intake.

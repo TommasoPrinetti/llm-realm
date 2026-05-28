@@ -2,14 +2,13 @@
 
 LLM Realm is a Markdown framework for turning a large source collection into a searchable, source-grounded research workspace for LLM agents.
 
-It keeps original material in a protected **Root Vault** and builds a lightweight **LLM Realm** beside it: folder indexes, evidence fragments, concept indexes, logs, and reports that help agents find and verify material without copying the source corpus.
+It keeps original material in a protected **Root Vault** and builds a lightweight **LLM Realm** beside it: 1:1 source copies with YAML headers, a shared dictionary, concept indexes, logs, and reports that help agents find and verify material without losing the original sources.
 
 ## Requirements
 
 | Tool | Version |
 |---|---|
-| Node.js | `>=16` |
-| npm | Any version bundled with a supported Node.js install |
+| bash | `>=3.2` (ships with macOS and most Linux distros) |
 | LLM agent CLI | Optional, but recommended: Codex, Claude Code, OpenCode, Kilo, or equivalent |
 
 ## Quick Start
@@ -17,8 +16,7 @@ It keeps original material in a protected **Root Vault** and builds a lightweigh
 ```bash
 git clone https://github.com/<owner>/llm-realm.git
 cd llm-realm
-npm install
-npm run llm-onboard
+bash bin/onboard.sh
 ```
 
 The onboarding command asks for the project name, Root Vault path, source policy, and preferred agent CLI. It writes the setup draft into:
@@ -28,14 +26,14 @@ The onboarding command asks for the project name, Root Vault path, source policy
 | [`02_user_realm/RESEARCH_BLUEPRINT.md`](./02_user_realm/RESEARCH_BLUEPRINT.md) | Project description and research direction |
 | [`00_system/instructions/REALM_CONFIGURATION.md`](./00_system/instructions/REALM_CONFIGURATION.md) | Root Vault path, source policy, protected paths, and evidence rules |
 
-After onboarding, start your agent in this repository and ask it to start the Realm. The agent will follow [`AGENTS.md`](./AGENTS.md), [`STARTUP.md`](./00_system/instructions/STARTUP.md), and [`ONBOARDING.md`](./00_system/instructions/ONBOARDING.md) to create the first folder indexes and run a retrieval smoke test.
+After onboarding, start your agent in this repository and ask it to start the Realm. The agent will follow [`AGENTS.md`](./AGENTS.md), [`STARTUP.md`](./00_system/instructions/STARTUP.md), and [`ONBOARDING.md`](./00_system/instructions/ONBOARDING.md) to build the dictionary, generate source copy headers, and run a retrieval smoke test.
 
 ## Verify Setup
 
 After the startup agent finishes, run:
 
 ```bash
-npm run check-startup
+bash bin/check-startup.sh
 ```
 
 The check passes only when required placeholders are gone, `setup_status` is set to `realm_started`, the Root Vault path exists, and the startup aggregator has been created.
@@ -47,7 +45,7 @@ The check passes only when required placeholders are gone, `setup_status` is set
 | [`AGENTS.md`](./AGENTS.md) | Main operating contract for autonomous agents |
 | [`GLOSSARY.md`](./GLOSSARY.md) | Shared vocabulary for the framework |
 | [`00_system/instructions/`](./00_system/instructions/) | Startup, routing, architecture, and configuration rules |
-| [`00_system/sub_agents/`](./00_system/sub_agents/) | Sub-agent instruction files for Conceptualizer, Navigator, Packer, and Checker |
+| [`00_system/sub_agents/`](./00_system/sub_agents/) | Sub-agent SOUL.md files for Conceptualizer, Navigator, Packer, and Checker |
 | [`00_system/templates/`](./00_system/templates/) | Report templates used during startup and agent work |
 | [`01_llm_realm/`](./01_llm_realm/) | Empty retrieval scaffold populated during startup |
 | [`02_user_realm/`](./02_user_realm/) | Project blueprint and protected writing area |
@@ -99,20 +97,18 @@ The home session orchestrates the sequence through [`PROCESS_ROUTER.md`](./00_sy
 
 | Command | Purpose |
 |---|---|
-| `npm run llm-onboard` | Collect setup answers and write the startup draft |
-| `npm run check-startup` | Validate that startup completed cleanly |
-| `npm run setup` | Alias for onboarding |
-| `npm run onboard` | Alias for onboarding |
-| `npm run realm-setup` | Alias for onboarding |
+| `bash bin/onboard.sh` | Collect setup answers and write the startup draft |
+| `bash bin/check-startup.sh` | Validate that startup completed cleanly |
 
 ## Fresh Clone State
 
 A fresh clone is intentionally sparse:
 
-- `01_llm_realm/00_root_mirror/` has no project-specific folder indexes yet.
+- `01_llm_realm/sources/` has no project-specific source copies yet.
 - `05_agent_reports/` is empty.
 - `03_logs/` contains empty log scaffolds.
 - `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md` is generated during onboarding from its template.
 - `REALM_CONFIGURATION.md` and `RESEARCH_BLUEPRINT.md` start with setup placeholders.
+- `.trash/` is empty (retired files are archived here instead of deleted).
 
 That is expected. The first real content appears only after onboarding and startup run against a real Root Vault.

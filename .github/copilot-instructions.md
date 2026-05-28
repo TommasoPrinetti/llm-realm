@@ -5,7 +5,7 @@ Read in order:
 2. 00_system/instructions/REALM_CONFIGURATION.md
 3. 00_system/instructions/PROCESS_ROUTER.md
 
-If the user asks to start the Realm, follow AGENTS.md and 00_system/instructions/ONBOARDING.md exactly:
+If the user asks to start the Realm, follow AGENTS.md and call the Startup sub-agent:
 - create a startup todo list if the tool exists,
 - translate the setup draft into blueprint/config,
 - change `setup_status: cli_started` to `setup_status: realm_started` in both 00_system/instructions/REALM_CONFIGURATION.md and 02_user_realm/RESEARCH_BLUEPRINT.md,
@@ -19,3 +19,4 @@ Core rules:
 - Keep agent outputs Markdown-only.
 - Back-search factual claims to a source path.
 - Label evidence-bearing outputs with `evidence_type` and `evidence_level`.
+- Read sub-agent SOUL.md files (not instruction files) before invoking specialists.

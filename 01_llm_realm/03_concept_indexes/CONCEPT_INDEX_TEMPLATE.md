@@ -1,16 +1,16 @@
 # Concept Index Template
 
-Use when several fragments share a concept.
+Use when several source copies share a concept.
 
 ```md
 ---
 type: concept_index
 role: concept_retrieval_layer
-purpose: [group fragments that share one recurring idea]
+purpose: [group source copies that share one recurring idea]
 scope: [one concept family]
 connects_to:
   - 01_llm_realm/00_realm_index.md
-  - 01_llm_realm/04_evidence_fragments/
+  - 01_llm_realm/sources/
   - 05_agent_reports/
 sub_agent: Navigator
 created: [date]
@@ -33,14 +33,14 @@ negative_case_status: none_found | partial | present | needs_search
 [[Category]]
 
 ## Evidence
-| Fragment/source | Why it matters | Confidence |
+| Source copy | Why it matters | Confidence |
 |---|---|---|
-| [[fragment]] or `/root_vault/path` | [short note] | high / medium / low |
+| `/sources/[path]/[file]` | [short note] | high / medium / low |
 
 ## Negative Cases
-| Fragment/source | Counter-pattern | Checker status |
+| Source copy | Counter-pattern | Checker status |
 |---|---|---|
-| [[fragment]] or `/root_vault/path` | [what it weakens] | pending / partial / verified |
+| `/sources/[path]/[file]` | [what it weakens] | pending / partial / verified |
 
 ## Comparison
 - Similar: [[concept]]

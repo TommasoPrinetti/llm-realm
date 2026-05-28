@@ -8,70 +8,81 @@ connects_to:
   - 00_system/instructions/REALM_CONFIGURATION.md
   - 02_user_realm/RESEARCH_BLUEPRINT.md
 created: 2026-05-26
-updated: 2026-05-27
+updated: 2026-05-28
 ---
 
 # Realm Startup Protocol
 
+This is the **setup translation protocol** that defines how to fill the configuration and research blueprint. The **Startup sub-agent** reads this file along with `STARTUP.md` and executes the workflow.
+
 Use once for a new research Realm.
 
-The agent starts this protocol automatically when AGENTS.md is read and the user asks to start the Realm, the configuration or blueprint still contains required placeholders, or either file contains `setup_status: cli_started`.
+The agent starts this protocol automatically when `AGENTS.md` is read and the user asks to **start the Realm**, the configuration or blueprint still contains required placeholders, or either file contains `setup_status: cli_started`.
 
-If the user already ran `npm run llm-onboard`, the agent must treat those answers as the setup draft and complete startup without repeating questions unless a required field is missing or a risky assumption blocks indexing. Startup means translating the setup draft, marking setup complete, and running the first indexing pass.
+If the user already ran `bash bin/onboard.sh`, the agent must treat those answers as the **setup draft** and complete startup without repeating questions unless a required field is missing or a risky assumption blocks indexing. Startup means translating the setup draft, marking setup complete, and running the first indexing pass.
 
 ## Steps
-1. Inspect 02_user_realm/RESEARCH_BLUEPRINT.md and 00_system/instructions/REALM_CONFIGURATION.md.
-2. Read 00_system/instructions/STARTUP.md; it is the canonical Root Vault to LLM Realm conversion prompt.
-3. Create a short todo list with the CLI's todo/task tool if available. This is mandatory when the tool exists. Minimum todo items:
+
+1. Inspect `02_user_realm/RESEARCH_BLUEPRINT.md` and `00_system/instructions/REALM_CONFIGURATION.md`.
+2. Read `00_system/instructions/STARTUP.md`; it is the **canonical Root Vault to LLM Realm conversion prompt**.
+3. Create a short todo list with the CLI's todo/task tool if available. This is **mandatory** when the tool exists. Minimum todo items:
    - inspect setup draft,
    - verify Root Vault,
    - synthesize blueprint/config,
-   - create folder mirror indexes,
+   - build master dictionary,
+   - generate source copy headers,
+   - disambiguate with user,
+   - build concept indexes,
    - run retrieval smoke test.
-4. Treat CLI-generated answers as a setup draft, not as questions to repeat.
+4. Treat CLI-generated answers as a **setup draft**, not as questions to repeat.
 5. Translate the draft into a usable research configuration before indexing:
    - preserve the project title and description,
    - register helpful artifact URLs or file paths,
    - infer a tentative source universe, vocabulary, methods, outputs, and indexing target from the description, artifacts, and Root Vault,
    - keep inferred fields explicitly marked as inferred when useful.
-6. Use shell/file tools to confirm the Root Vault path exists and is treated as read-only.
-7. If artifact URLs are present, use web/MCP/browser tools only when `external_sources_allowed` is set to `yes`. If the policy is `no`, record URLs but do not fetch them.
-8. Fill 02_user_realm/RESEARCH_BLUEPRINT.md.
-9. Fill 00_system/instructions/REALM_CONFIGURATION.md, especially `root_vault_path` and source policy. Replace `setup_status: cli_started` with `setup_status: realm_started` in both startup files when translation is complete.
+6. Use shell/file tools to confirm the Root Vault path exists and is treated as **read-only**.
+7. If artifact URLs are present, use web/MCP/browser tools **only** when `external_sources_allowed` is set to `yes`. If the policy is `no`, record URLs but do not fetch them.
+8. Fill `02_user_realm/RESEARCH_BLUEPRINT.md`.
+9. Fill `00_system/instructions/REALM_CONFIGURATION.md`, especially `root_vault_path` and source policy. Replace `setup_status: cli_started` with `setup_status: realm_started` in both startup files when translation is complete.
 10. Audit the translation before moving on:
-   - every project detail from the CLI draft is preserved or intentionally summarized,
-   - every artifact URL or file path is listed,
-   - every source policy and protected path is reflected in configuration,
-   - inferred scope, source universe, vocabulary, methods, outputs, and initial indexing target are present where useful,
-   - anything not translated is listed as deferred with a reason.
-11. Create folder-mirrored indexes under 01_llm_realm/00_root_mirror/ using 01_llm_realm/00_root_mirror/FOLDER_INDEX_TEMPLATE.md.
-12. If 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md does not exist, create it from 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR_TEMPLATE.md.
-13. Run the first indexing pass described in 00_system/instructions/STARTUP.md. Do this in the same turn as startup unless blocked by a missing required field, an unreachable Root Vault, or required external URL permission.
-14. Run the retrieval smoke test in 00_system/instructions/STARTUP.md.
-15. Use 00_system/templates/STARTUP_REPORT_TEMPLATE.md for the final response. Report the completed startup checklist, followed by a `Next Steps` section with 3 to 5 concrete actions the researcher can ask for next.
+    - every project detail from the CLI draft is preserved or intentionally summarized,
+    - every artifact URL or file path is listed,
+    - every source policy and protected path is reflected in configuration,
+    - inferred scope, source universe, vocabulary, methods, outputs, and initial indexing target are present where useful,
+    - anything not translated is listed as deferred with a reason.
+11. Source copies are already in `01_llm_realm/sources/` (created by the CLI during onboarding). Build the **master dictionary** by reading all copied files and extracting canonical names, places, organizations, and domain terms into `01_llm_realm/00_dictionary.md`.
+12. Generate **YAML headers** for every source copy using the dictionary for consistent terminology.
+13. If `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md` does not exist, create it from its template.
+14. Run the first indexing pass described in `00_system/instructions/STARTUP.md`. Do this in the **same turn** as startup unless blocked by a missing required field, an unreachable Root Vault, or required external URL permission.
+15. Run the **retrieval smoke test** in `00_system/instructions/STARTUP.md`.
+16. Use `00_system/templates/STARTUP_REPORT_TEMPLATE.md` for the final response. Report the completed startup checklist, followed by a `Next Steps` section with **3 to 5 concrete actions** the researcher can ask for next.
 
 Do not ask follow-up questions before step 11 unless a required field is absent, the Root Vault path cannot be located, external URL access needs permission, or a risky assumption blocks immediate indexing. The user's `start the Realm` prompt is already permission to run initial indexing.
 
-Use the CLI's todo/task tool if available to track startup; this is mandatory when the tool exists. Keep the todo list in the tool UI, not in the Realm, unless the researcher asks for a written checklist.
+Use the CLI's todo/task tool if available to track startup; this is **mandatory** when it exists. Keep the todo list in the tool UI, not in the Realm, unless the researcher asks for a written checklist.
 
-Use the CLI's question/input tool for required questions. If no question tool exists, ask in chat. Keep questions short and grouped only when unavoidable.
+Use the CLI's `question` tool for required questions. If no question tool exists, ask in chat. Keep questions short and grouped only when unavoidable.
 
 ## Do Not Stop Early
+
 - Do not stop after reading files.
-- Do not stop after creating only a folder index.
+- Do not stop after generating only a few headers.
 - Do not ask whether to run initial indexing after the user has said `start the Realm`.
 - Do not leave `setup_status: cli_started` in the blueprint or configuration after translation.
-- Do not report startup complete unless the setup draft was translated, the translation audit passed, the aggregator exists, and initial indexing ran or is explicitly blocked.
+- Do not report startup complete unless the setup draft was translated, the translation audit passed, the dictionary exists, source headers are generated, and initial indexing ran or is explicitly blocked.
 
 ## Final Response
-Use 00_system/templates/STARTUP_REPORT_TEMPLATE.md. End the startup response with a short `Next Steps` section. Suggestions should be operational and specific to the mapped Root Vault when possible. Use options like:
-- extract first evidence fragments from a named source batch,
-- build the first concept index from repeated themes,
-- answer a source-grounded research question,
-- deepen indexing for a specific folder or source type,
-- run a Checker quote, citation, or missing-source verification pass.
+
+Use `00_system/templates/STARTUP_REPORT_TEMPLATE.md`. End the startup response with a short **Next Steps** section. Suggestions should be operational and specific to the mapped Root Vault when possible. Use options like:
+
+- answer a source-grounded research question using the source copies,
+- build a new concept index from a recurring theme,
+- deepen the dictionary with more detailed entity extraction,
+- run a Checker verification pass on source copy headers,
+- add more sources to the Root Vault and re-run intake.
 
 ## Minimum Research Blueprint
+
 - Project title
 - Project description
 - Helpful artifact URLs or file paths, if any
@@ -80,6 +91,7 @@ Use 00_system/templates/STARTUP_REPORT_TEMPLATE.md. End the startup response wit
 - External source policy
 
 ## Minimum Configuration
+
 - `root_vault_path`
 - `root_vault_mode`
 - `source_policy`
@@ -89,7 +101,9 @@ Use 00_system/templates/STARTUP_REPORT_TEMPLATE.md. End the startup response wit
 - `l2_policy`
 
 ## Suggested Question Groups
+
 Keep setup short. Ask for:
+
 1. Project name.
 2. One free-form project description.
 3. Helpful artifact URLs or file paths.
@@ -100,17 +114,22 @@ Keep setup short. Ask for:
 Do not ask the researcher to separately define scope, research object, current questions, source types, methods, outputs, vocabulary, or blind spots during fast setup. Infer those later from the description, artifacts, and Root Vault unless the researcher offers them or the missing detail blocks the immediate task.
 
 ## Done When
+
 - Root Vault is protected and locatable.
 - Configuration points to the Root Vault.
 - `setup_status` is `realm_started` if the files were created by CLI setup.
-- 01_llm_realm/00_root_mirror/ contains folder-level indexes for meaningful Root Vault folders.
-- 03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md exists.
+- `01_llm_realm/sources/` contains text-based copies with YAML headers.
+- `01_llm_realm/00_dictionary.md` exists with canonical terms and all ambiguities resolved (or marked `unresolved`).
+- Disambiguation questions have been asked and answered.
+- `03_logs/research_tendencies/RESEARCH_NEED_AGGREGATOR.md` exists.
 - Initial source indexing has a clear target and a Checker verification smoke test.
 
 ## Smoke Test
+
 After startup, test with one small source batch:
-1. Create one folder index.
-2. Extract one evidence fragment.
-3. Link it to one concept index.
-4. Verify it with Checker.
+
+1. Pick a term from the dictionary.
+2. Grep `01_llm_realm/sources/` for it.
+3. Confirm the result points to a source copy.
+4. Open the source copy and verify the YAML header.
 5. Answer one small question with source path, evidence type, and evidence level.

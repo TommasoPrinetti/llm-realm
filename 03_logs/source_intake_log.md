@@ -6,10 +6,10 @@ purpose: [track new Root Vault batches and retained external sources before mapp
 scope: [source intake only]
 connects_to:
   - 01_llm_realm/00_realm_index.md
-  - 01_llm_realm/00_root_mirror/
+  - 01_llm_realm/sources/
   - 03_logs/external_queries.md
 created: 2026-05-26
-updated: 2026-05-27
+updated: 2026-05-28
 ---
 
 # Source Intake Log
@@ -21,9 +21,9 @@ All new Root Vault batches and retained external sources are registered here bef
 
 ## Status Values
 - `registered`
-- `mapped`
-- `metadata_complete`
-- `fragments_extracted`
+- `copied`
+- `dictionary_updated`
+- `headers_generated`
 - `indexed`
 - `needs_ocr`
 - `needs_transcription`

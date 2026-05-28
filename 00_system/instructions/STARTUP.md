@@ -1,55 +1,56 @@
 ---
 type: startup_prompt
 role: setup_protocol
-purpose: [translate the startup draft into an initial Realm configuration and index]
+purpose: [translate the protected Root Vault into a searchable, header-indexed source collection]
 scope: [initial setup only]
 connects_to:
   - 00_system/instructions/REALM_CONFIGURATION.md
   - 00_system/instructions/ONBOARDING.md
   - 01_llm_realm/00_realm_index.md
-created: 2026-05-26
-updated: 2026-05-27
+  - 01_llm_realm/00_dictionary.md
+created: 2026-05-28
+updated: 2026-05-28
 ---
 
-# STARTUP.md - Root Vault To LLM Realm Conversion Prompt
+# STARTUP.md — Root Vault To LLM Realm Conversion
 
-Use this file when the user asks to start the Realm or when setup files still contain placeholders.
+This is the **protocol document** that defines what to do and how to do it. The **Startup sub-agent** reads this file and executes the steps.
+
+Use this file when the user asks to **start the Realm** or when setup files still contain placeholders.
 
 ## Mission
-Translate the protected Root Vault into the first usable LLM Realm index.
 
-The goal is not file-to-file equality. The goal is folder-to-folder navigability:
+Translate the protected Root Vault into the first usable **LLM Realm**: a searchable, header-indexed collection of source copies with a shared dictionary for consistent terminology.
 
-```txt
-Root Vault folder        -> LLM Realm folder index
-Root Vault subfolder     -> LLM Realm subfolder index
-Important source cluster -> deeper folder index, metadata, fragments, concept indexes when useful
-```
+The CLI onboarding script has already copied text-based files from the Root Vault into `01_llm_realm/sources/`. The agent's job is to:
 
-The LLM Realm must let an agent find a promising topic quickly, then go back to the Root Vault path for fuller evidence.
-
-This file subsumes the old initial-indexing protocol. Use it for startup, first mirror creation, and the first index pass.
+1. **Build the master dictionary**
+2. **Generate YAML headers** for every source copy
+3. **Build concept indexes** from repeated themes
+4. **Update the master index**
+5. **Run the smoke test**
 
 ## Non-Negotiable
-- Never edit, rename, reorganize, or delete Root Vault files.
-- Do not copy the Root Vault into the Realm.
-- Do not create one Realm file per Root Vault file unless the file is analytically important.
-- Prefer compact folder indexes over exhaustive summaries.
-- Put retrieval-critical terms in YAML frontmatter because fast grep starts there.
+
+- **Never edit, rename, reorganize, or delete Root Vault files.**
+- Do not copy binary files (PDFs, images, audio, video) into the Realm — note them in the realm index as **pointer-only**.
+- Use the dictionary for consistent terminology across all headers.
+- Put retrieval-critical terms in **YAML frontmatter** because fast grep starts there.
 - Put interpretation and context in the body.
 
 ## Required Startup Inputs
+
 Read:
 
-1. AGENTS.md
-2. 00_system/instructions/REALM_CONFIGURATION.md
-3. 00_system/instructions/SYSTEM_ARCHITECTURE_MAP.md
-4. 00_system/instructions/PROCESS_ROUTER.md
-5. 02_user_realm/RESEARCH_BLUEPRINT.md
-6. 01_llm_realm/01_metadata/HEADER_TEMPLATE.md
-7. 01_llm_realm/00_root_mirror/FOLDER_INDEX_TEMPLATE.md
+1. `AGENTS.md`
+2. `00_system/instructions/REALM_CONFIGURATION.md`
+3. `00_system/instructions/SYSTEM_ARCHITECTURE_MAP.md`
+4. `00_system/instructions/PROCESS_ROUTER.md`
+5. `02_user_realm/RESEARCH_BLUEPRINT.md`
+6. `01_llm_realm/01_metadata/HEADER_TEMPLATE.md`
 
-## Step 1 - Verify Setup
+## Step 1 — Verify Setup
+
 Fill or verify:
 - project title,
 - project description,
@@ -59,130 +60,145 @@ Fill or verify:
 - initial vocabulary,
 - expected outputs.
 
-If the Root Vault path is missing or unreachable, stop and ask for it.
+If the Root Vault path is **missing or unreachable**, stop and ask for it.
 
-## Step 2 - Survey Root Vault Folders
-List every directory in the Root Vault, full tree. For each directory:
+## Step 2 — Survey Root Vault
 
-1. List all files and subdirectories (skip .DS_Store, system files, empty dirs)
-2. Note: file types present (.pdf, .md, .docx, .mp4, .wav, .csv, .json, etc.), count per type, approximate date range from filenames or file metadata
-3. Open and read enough files to characterize the folder's content accurately — examine different file types and topics within the folder rather than reading every file cover to cover
-4. Record: source types, modality, names, dates, topics, keywords, machine-readability, gaps (OCR needed, untranscribed audio, etc.)
+List every directory in the Root Vault. For each directory:
 
-Every Root Vault folder must be surveyed. Skip only temp, system, cache, or truly empty directories.
+1. List all files and subdirectories (skip `.DS_Store`, system files, empty dirs)
+2. Note: file types present (`.pdf`, `.md`, `.docx`, `.mp4`, `.wav`, `.csv`, `.json`, etc.), count per type, approximate date range
+3. Open and read enough files to characterize the folder's content accurately
+4. Record: source types, modality, names, dates, topics, keywords, machine-readability, gaps
 
-## Step 3 - Create Folder-Mirrored Realm Indexes
-For every Root Vault folder that contains retrievable material, create a matching INDEX.md:
+Separate text-based files (already copied to `sources/`) from binary files (still in Root Vault).
 
-```txt
-01_llm_realm/00_root_mirror/[root-relative-folder]/INDEX.md
+## Step 3 — Build Master Dictionary
+
+Read every text-based source copy in `01_llm_realm/sources/`. Extract:
+
+1. **Names** — people, roles, named entities. Merge variants into canonical forms (e.g., "Alice", "A. Tufano", "Alice Tufano" → canonical: "Alice Tufano"). Record the language of each term.
+2. **Places** — geographic locations, sites, regions. Merge variants (e.g., "Pacific", "Pacific Islands", "Oceania" → canonical: "Pacific Islands"). Record the language.
+3. **Organizations** — institutions, groups, agencies. Merge abbreviations (e.g., "WWF", "World Wildlife Fund" → canonical: "World Wildlife Fund"). Record the language.
+4. **Concepts** — domain-specific ideas, theories, frameworks. Map to concept index entries. Record the language.
+5. **Domain terms** — specialized vocabulary, acronyms, jargon. Define each. Record the language.
+
+**Multilingual rule:** Keywords must appear in the language they were found in. If a source is in French, French keywords are recorded. If in English, English keywords. If a concept appears in multiple languages, list all language variants as aliases so grep finds any form.
+
+Example:
+```markdown
+| Canonical form | Language | Aliases | Source files |
+|---|---|---|---|
+| adaptation | fr | adapção (pt), adaptation (en) | interview_01.md |
+| coral reef | en | récif corallien (fr), recife de coral (pt) | fieldnote_03.md |
 ```
 
-Procedure per folder:
-1. Create the directory under 01_llm_realm/00_root_mirror/ if it does not already exist
-2. Write `INDEX.md` using 01_llm_realm/00_root_mirror/FOLDER_INDEX_TEMPLATE.md
-3. Fill YAML frontmatter with the grep terms you collected during the survey (source_types, modalities, topics, keywords, people, places, date_range)
-4. Write the body — exactly the 5 sections from Step 5
-5. Set `index_status: draft` initially
+Write `01_llm_realm/00_dictionary.md` with canonical forms, languages, aliases, and source file references. Every term that appears in more than one source file **MUST** have an alias entry so grep finds any variant in any language.
 
-Example mapping:
+## Step 4 — Generate Source Copy Headers
 
-```txt
-Root Vault path:          /RootVault/interviews/phase_1/
-Realm mirror INDEX.md:    01_llm_realm/00_root_mirror/interviews/phase_1/INDEX.md
-```
-
-Rules:
-- Index the whole Root Vault, not a subset. Every folder with retrievable material gets an INDEX.md.
-- One INDEX.md per folder. Do not create one per file.
-- Use the template exactly. Do not skip YAML fields that have values.
-- Omit YAML fields that have no value — do not write `people: unknown`.
-
-## Step 4 - Write Grep-Friendly YAML
-The YAML header is the fast retrieval layer. Keep it compact, normalized, and grep-friendly.
-
-Required folder-index fields:
+For every file in `01_llm_realm/sources/`, generate a YAML header using the dictionary. The header must contain:
 
 ```yaml
 ---
-type: folder_index
-index_status: draft | partial | mapped | verified
-root_path: "[absolute or configured Root Vault path]"
-root_rel_path: "[folder path relative to Root Vault]"
-realm_mirror_path: "01_llm_realm/00_root_mirror/[root_rel_path]/INDEX.md"
-mirror_level: root | top_level | subfolder | source_cluster
-source_types: [interview, fieldnote, dataset]
-modalities: [text, pdf, image, audio, video, dataset]
-machine_readable: yes | no | partial
-date_range: "[YYYY-YYYY or unknown]"
-people: [name_or_role]
-places: [place]
-organizations: [organization]
-topics: [topic]
-keywords: [grep, friendly, terms]
+type: source_copy
+source: "/absolute/path/to/root_vault/[relative-path]/[filename]"
+source_type: interview | fieldnote | article | report | dataset | ...
+text_type: md | txt | rtf | csv | json | ...
+language: en | fr | pt | es | ...
+date: "YYYY-MM-DD or YYYY-MM-DD"
+people: ["canonical name from dictionary"]
+places: ["canonical place from dictionary"]
+organizations: ["canonical org from dictionary"]
+topics: ["topic1", "topic2"]
+keywords: ["keyword1", "keyword2", "keyword3"]
 concepts: ["[[Concept Name]]"]
-codes: [descriptive_code]
-evidence_type: processed
-evidence_level: L1
-checker_required: true
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
+related_sources: ["other_file.md"]
+created: "YYYY-MM-DD"
+updated: "YYYY-MM-DD"
 ---
 ```
 
 Rules:
-- Use lowercase snake_case for field names.
-- Use short arrays for grep terms.
-- Prefer stable nouns over prose in YAML.
-- Do not put long summaries in YAML.
-- Leave unknown fields as `unknown` only when the field is useful for retrieval.
-- Omit fields that do not help retrieval.
+- Use canonical forms from the dictionary — **never invent new variants**.
+- `people`, `places`, `organizations` **MUST** use dictionary canonical names.
+- `keywords` should include both canonical terms and common aliases (so grep finds any form).
+- `concepts` link to concept index files in `03_concept_indexes/`.
+- `related_sources` lists other source copies that share topics or concepts.
+- Omit fields that have no value — do not write `people: []`.
 
-## Step 5 - Write Token-Efficient Bodies
-The body of each folder index should be short:
+Write the header at the top of each source copy file. The body (original content) stays **unchanged**.
 
-1. `Folder Purpose` - 2 to 5 bullets.
-2. `What Is Here` - compact table of subfolders or source clusters.
-3. `Retrieval Notes` - terms, aliases, language variants, likely concepts.
-4. `Checker Pointers` - exact Root Vault folders or files to open for verification.
-5. `Gaps` - OCR, transcription, missing dates, uncertain provenance.
+## Step 4b — Embed Vault Structure in Navigator SOUL
 
-Do not summarize every file. Summarize the folder as a search surface.
+After generating headers, capture the source tree structure and embed it into `00_system/sub_agents/navigator/SOUL.md` under the `## Vault Structure` heading.
 
-## Step 6 - Add Deeper Indexes Only When Useful
-Create deeper folder indexes, metadata, evidence fragments, and concept indexes only when they improve retrieval or reuse.
+Run:
+```bash
+find 01_llm_realm/sources/ -maxdepth 3 -type f | sort | sed 's|^|  |'
+```
 
-Use:
-- 01_llm_realm/00_root_mirror/ nested `INDEX.md` files for source batches needing deeper navigation.
-- 01_llm_realm/04_evidence_fragments/ for reusable quotes or precise observations.
-- 01_llm_realm/03_concept_indexes/ when several fragments share a concept.
+Replace the placeholder text in Navigator's SOUL.md with the actual output. This gives the Navigator immediate awareness of the source tree without grepping.
 
-## Step 7 - Update Master Index
-Update 01_llm_realm/00_realm_index.md with:
+## Step 4c — Disambiguate With The User
+
+This is the moment to **ask questions**. You have now read every source file and built the dictionary. You know what's ambiguous. Use the `question` tool to resolve ambiguities before finalizing headers and concept indexes.
+
+Ask about:
+
+1. **Name collisions** — If "Maria" appears in 3 sources, is it the same Maria? Ask the user to confirm which people are distinct and which are aliases.
+2. **Place ambiguity** — If "the village" appears without a name, ask the user which village. If "the coast" could mean multiple locations, disambiguate.
+3. **Unclear concepts** — If a domain term has no obvious definition in the sources, ask the user what it means.
+4. **Missing metadata** — If a source has no date, no author, or unclear context, ask the user to fill the gap.
+5. **Cross-language ambiguity** — If the same concept appears in multiple languages with slightly different meanings, ask which meaning is intended.
+6. **Source relationships** — If two sources seem to contradict each other, ask the user whether this is a real disagreement or a misunderstanding.
+
+**Do not guess. Do not assume.** The dictionary and headers are only as good as the disambiguation that feeds them. Ask concisely — group related questions together, keep each question short, and offer concrete options when possible.
+
+If the user cannot answer (e.g., they don't know either), mark the term as `unresolved` in the dictionary and move on.
+
+## Step 5 — Build Concept Indexes
+
+Identify concepts that appear across multiple source copies. For each recurring concept:
+
+1. Create a concept index in `01_llm_realm/03_concept_indexes/` using `CONCEPT_INDEX_TEMPLATE.md`
+2. List all source copies that reference this concept
+3. Note similar and contrasting concepts
+4. Mark negative cases if present
+
+Use `01_llm_realm/00_dictionary.md` to identify concepts that appear in **3+ source files**.
+
+## Step 6 — Update Master Index
+
+Update `01_llm_realm/00_realm_index.md` with:
 - Root Vault path,
-- mirror index coverage,
-- mapped top-level folders,
-- folders not yet indexed,
-- concept indexes created,
-- known gaps.
+- Source copy coverage (how many files copied, by type),
+- Dictionary status (canonical names, places, organizations, concepts),
+- Concept indexes created,
+- Non-text files noted as pointer-only,
+- Known gaps.
 
-## Step 8 - Smoke Test
-Before reporting startup complete, run one retrieval smoke test:
+## Step 7 — Smoke Test
 
-1. Pick one concept, topic, person, place, or keyword from YAML.
-2. Grep the LLM Realm for it.
-3. Confirm the result points to a folder index.
-4. Open the Root Vault path listed in that folder index.
-5. Record whether Checker can verify the source path.
+Before reporting startup complete, run **one retrieval smoke test**:
 
-Startup is complete only if the LLM Realm can lead back to the Root Vault.
+1. Pick one keyword, concept, person, or place from the dictionary.
+2. Grep `01_llm_realm/sources/` for it.
+3. Confirm the result points to a source copy file.
+4. Open that source copy and verify the YAML header is well-formed.
+5. Verify the dictionary has a canonical entry for the matched term.
+
+Startup is complete **only if** grep leads to a readable source copy with a valid header.
 
 ## Startup Output
-Write one report in 05_agent_reports/ with:
+
+Write one report in `05_agent_reports/` with:
 - configuration status,
 - Root Vault path verified,
-- folder mirror coverage,
+- source copy coverage,
+- dictionary size (names, places, organizations, concepts),
 - files created,
+- concept indexes created,
 - smoke test result,
-- remaining unmapped folders,
-- recommended next indexing actions.
+- remaining non-text files in Root Vault,
+- recommended next actions.

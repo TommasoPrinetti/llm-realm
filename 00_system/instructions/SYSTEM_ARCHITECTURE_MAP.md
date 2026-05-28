@@ -6,14 +6,16 @@ scope: [repo-wide architecture]
 connects_to:
   - AGENTS.md
   - 00_system/instructions/PROCESS_ROUTER.md
-  - 00_system/sub_agents/conceptualizer/subagent_conceptualizer_instructions.md
-  - 00_system/sub_agents/navigator/subagent_navigator_instructions.md
-  - 00_system/sub_agents/packer/subagent_packer_instructions.md
-  - 00_system/sub_agents/checker/subagent_checker_instructions.md
+  - 00_system/sub_agents/conceptualizer/SOUL.md
+  - 00_system/sub_agents/navigator/SOUL.md
+  - 00_system/sub_agents/packer/SOUL.md
+  - 00_system/sub_agents/checker/SOUL.md
+  - 00_system/sub_agents/cleaner/SOUL.md
+  - 00_system/sub_agents/startup/SOUL.md
   - 01_llm_realm/00_realm_index.md
   - 03_logs/user_requests.md
 created: 2026-05-26
-updated: 2026-05-27
+updated: 2026-05-28
 ---
 
 # LLM Realm System Architecture Map
@@ -26,16 +28,16 @@ Root Vault
   read-only original sources
   canonical evidence layer
         |
-        | initial setup translates, indexes, and compresses navigation
+        | CLI copies text-based files, agent builds dictionary and headers
         v
 LLM Realm
-  writable organic index
-  folder indexes, fragments, concept indexes, logs, reports
+  writable indexed collection
+  source copies with YAML headers, dictionary, concept indexes, logs, reports
         |
         | prompt pipeline searches here first for token economy
         v
 User-facing answers
-  checked against Root Vault before factual claims are finalized
+  checked against source copies before factual claims are finalized
 ```
 
 ## Prompt Lifecycle
@@ -63,6 +65,8 @@ Route sub-agents as needed
   |-- Navigator ------> raw evidence packet
   |-- Packer ---------> coherent report
   |-- Checker --------> quote/claim verification + index maintenance
+  |-- Cleaner --------> repo hygiene audit + archival
+  |-- Startup --------> startup workflow execution
   |
   v
 Final answer to user
@@ -75,11 +79,17 @@ The home session is the orchestrator. It is governed by AGENTS.md and controls r
 |---|---|---|---|---|
 | 0 | Home session | Log request, choose route, add execution controls when needed, pass outputs, enforce stop conditions | User prompt, router, configuration | Fast-path answer or routed sequence |
 | 1 | Conceptualizer | Understand the research need and translate it into searchable concepts | User prompt, blueprint, configuration | Search brief, keywords, route recommendation, optional task decomposition |
-| 2 | Navigator | Search the LLM Realm first and Root Vault only when needed | Search brief, folder indexes, concept indexes, Root Vault paths | Raw evidence packet with source paths |
-| 3 | Packer | Build a coherent report answering the original request | Original prompt, search brief, evidence packet | Report in 05_agent_reports/, with completed/partial/unresolved sections when needed |
-| 4 | Checker | Verify quotes and claims, then maintain indexes if needed | Report, evidence packet, Root Vault, registered sources | Verification note, corrected report/index if needed, including partial status when applicable |
+| 2 | Navigator | Search the LLM Realm first and Root Vault only when needed | Search brief, source copies, concept indexes, dictionary, Root Vault paths | Raw evidence packet with source paths |
+| 3 | Packer | Build a coherent report answering the original request | Original prompt, search brief, evidence packet | Report in `05_agent_reports/`, with completed/partial/unresolved sections when needed |
+| 4 | Checker | Verify quotes and claims, then maintain indexes if needed | Report, evidence packet, source copies, Root Vault, registered sources | Verification note, corrected report/index if needed, including partial status when applicable |
+| 5 | Cleaner | Audit repo hygiene and move outdated files to `.trash/` | Realm index, source copies, Root Vault path, concept indexes, dictionary | Cleaner report, files moved to `.trash/` |
+| 6 | Startup | Execute the startup workflow to create the first usable LLM Realm | Setup draft, Root Vault path, configuration, blueprint | Completed configuration, dictionary, source headers, concept indexes, startup report |
 
-The Checker can run alone when the user asks for verification, source-path repair, quote checking, or index maintenance.
+The **Checker** can run alone when the user asks for verification, source-path repair, quote checking, or index maintenance.
+
+The **Cleaner** runs on-demand when the user asks to clean up or verify repo hygiene.
+
+The **Startup** agent runs when the user asks to start the Realm or setup files contain placeholders. It produces disambiguation briefs for the orchestrator when questions are needed.
 
 ## Execution Control Layer
 The control layer is owned by the home session, not by a new sub-agent. It is activated only when a route branches, risks stalling, needs retries, needs a checkpoint, or can return a useful partial result.
@@ -95,10 +105,13 @@ The control layer is owned by the home session, not by a new sub-agent. It is ac
 | Monitoring | Track route health over time | 03_logs/execution_runs.md |
 
 ## Setup Lifecycle
-Initial setup creates the translation layer between Root Vault and LLM Realm.
+Initial setup creates the translation layer between Root Vault and LLM Realm. The **Startup** sub-agent executes this workflow, reading `STARTUP.md` and `ONBOARDING.md` as protocol documents.
 
 ```txt
 Setup draft / user startup prompt
+  |
+  v
+Startup sub-agent receives brief
   |
   v
 Fill configuration and research blueprint
@@ -107,15 +120,25 @@ Fill configuration and research blueprint
 Verify Root Vault path and protection rules
   |
   v
-Survey Root Vault structure
+CLI copies text-based files to 01_llm_realm/sources/
   |
   v
-Create initial LLM Realm index
+Agent builds master dictionary
   |
-  |-- folder mirror indexes
-  |-- nested folder indexes where useful
-  |-- reusable evidence fragments
-  |-- concept indexes where repeated patterns exist
+  v
+Agent generates YAML headers for all source copies
+  |
+  v
+Disambiguate with user (via orchestrator) if needed
+  |
+  v
+Build concept indexes from repeated themes
+  |
+  v
+Update master index
+  |
+  v
+Run smoke test
   |
   v
 Mark setup_status: realm_started
@@ -125,37 +148,39 @@ The setup output is not a final interpretation of the research corpus. It is the
 
 ## Search Order
 1. 01_llm_realm/00_realm_index.md
-2. Relevant folder indexes in 01_llm_realm/00_root_mirror/
-3. Relevant concept indexes in 01_llm_realm/03_concept_indexes/
-4. Relevant evidence fragments in 01_llm_realm/04_evidence_fragments/
-5. Root Vault source files for verification, missing context, or unmapped material
+2. 01_llm_realm/sources/ — grep YAML headers for keywords, concepts, people, places
+3. 01_llm_realm/00_dictionary.md — find canonical terms and aliases
+4. 01_llm_realm/03_concept_indexes/ — thematic grouping of source copies
+5. Root Vault source files for verification or non-text material
 6. External sources only when allowed by configuration or explicitly requested
 
 ## Evidence Hierarchy
 | Layer | Role |
 |---|---|
 | Root Vault source | Canonical source of truth |
-| Registered external source | Allowed only under external source policy |
-| Evidence fragment | Reusable, indexed quote or source excerpt |
-| Folder index | Navigation layer |
-| Concept index | Retrieval and pattern layer |
+| Source copy with header | Indexed, searchable copy in the Realm |
+| Dictionary | Canonical vocabulary for consistent headers |
+| Concept index | Thematic retrieval and pattern layer |
 | Packer report | User-facing synthesis, not evidence by itself |
 | Checker note | Verification state for quotes and claims |
 
 ## Active Files
 | File | Role |
 |---|---|
-| AGENTS.md | Top-level operating rules |
-| 00_system/instructions/PROCESS_ROUTER.md | Prompt routing rules for the home-session orchestrator |
-| 00_system/instructions/STARTUP.md | Canonical Root Vault to LLM Realm conversion prompt |
-| 00_system/sub_agents/conceptualizer/subagent_conceptualizer_instructions.md | Conceptualizer contract — defines what needs to be searched |
-| 00_system/sub_agents/navigator/subagent_navigator_instructions.md | Navigator contract — finds material in Realm and Root Vault |
-| 00_system/sub_agents/packer/subagent_packer_instructions.md | Packer contract — turns material into coherent reports |
-| 00_system/sub_agents/checker/subagent_checker_instructions.md | Checker contract — verifies claims, quotes, and indexes |
-| 01_llm_realm/00_root_mirror/ | Folder-level Root Vault mirror indexes |
-| 03_logs/user_requests.md | Request log |
-| 03_logs/execution_runs.md | Execution-control log for retries, timeouts, checkpoints, branching, and partial results |
-| 05_agent_reports/ | Reports, checkpoints, evidence packets, and Checker verification notes |
+| `AGENTS.md` | Top-level operating rules |
+| `00_system/instructions/PROCESS_ROUTER.md` | Prompt routing rules for the home-session orchestrator |
+| `00_system/instructions/STARTUP.md` | Canonical Root Vault to LLM Realm conversion prompt |
+| `00_system/sub_agents/conceptualizer/SOUL.md` | Conceptualizer contract — defines what needs to be searched |
+| `00_system/sub_agents/navigator/SOUL.md` | Navigator contract — finds material in source copies and Root Vault |
+| `00_system/sub_agents/packer/SOUL.md` | Packer contract — turns material into coherent reports |
+| `00_system/sub_agents/checker/SOUL.md` | Checker contract — verifies claims, quotes, and indexes |
+| `00_system/sub_agents/cleaner/SOUL.md` | Cleaner contract — audits repo hygiene, moves outdated files to `.trash/` |
+| `00_system/sub_agents/startup/SOUL.md` | Startup contract — executes startup workflow to create first usable LLM Realm |
+| `01_llm_realm/00_dictionary.md` | Shared term vocabulary for coherent source headers |
+| `01_llm_realm/sources/` | 1:1 copies of text-based Root Vault files with YAML headers |
+| `03_logs/user_requests.md` | Request log |
+| `03_logs/execution_runs.md` | Execution-control log for retries, timeouts, checkpoints, branching, and partial results |
+| `05_agent_reports/` | Reports, checkpoints, evidence packets, and Checker verification notes |
 
 ## Retired Model
-The previous agent names are historical. Active routing now uses Conceptualizer, Navigator, Packer, and Checker. Archived files may mention retired names, but archived material is not active instruction.
+The previous agent names are historical. Active routing now uses Conceptualizer, Navigator, Packer, Checker, Cleaner, and Startup. Archived files may mention retired names, but archived material is not active instruction.
